@@ -9,7 +9,7 @@
 import Foundation
 
 class Level {
-    private var stage: Int = Game.initialStage
+    private var stage: Int
     
     /* Array for tile background */
     var tiles = Array2D<Tile>(cols: Game.numCols, rows: Game.numRows)
@@ -20,7 +20,8 @@ class Level {
     /* Array for collection of enemies on board */
     var enemies: Array<Enemy> = []
     
-    init() {
+    init(stage: Int ) {
+        self.stage = stage
         /* Initialize all elements in 'tiles' to a tile */
         for row in 0..<Game.numRows {
             for col in 0..<Game.numCols {
@@ -214,4 +215,11 @@ class Level {
         return objectAt(col: col, row: row) == nil
     }
 
+    func nextStage() {
+        self.stage += 1
+    }
+    
+    func getStage() -> Int {
+        return self.stage
+    }
 }

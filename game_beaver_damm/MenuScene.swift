@@ -74,7 +74,7 @@ class MenuScene: SKScene {
         print("touched")
         let touch = touches.first
         let location = touch?.location(in: buttonLayer)
-        let touchedNode = self.nodes(at: location!).first
+        let touchedNode = buttonLayer.nodes(at: location!).first
         
         if touchedNode == playLabel {
             let scene: SKScene = GameScene(size: self.size)

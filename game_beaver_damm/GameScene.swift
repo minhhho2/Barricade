@@ -114,13 +114,12 @@ class GameScene: SKScene {
         let rightBtnPos = CGPoint(x: self.size.width / 2 - btnSize.width / 2, y: -self.size.height / 2 + 2.5 * btnSize.height)
         configureSKSpriteNode(node: rightBtn, imageName: "RightArrow", position: rightBtnPos, zPosition: 4, size: btnSize, alpha: 0.2)
         
-        startNewGame()
-        prepareNewGame()
+        startNewGame(stage: Game.initialStage)
+        getReadyNewGame()
  
-        
     }
     
-    func prepareNewGame() {
+    func getReadyNewGame() {
         readyLabel = SKLabelNode()
         let readyLblPos = CGPoint(x: 0, y: 0)
         configureLabelNode(node:readyLabel!, text: "Press to play!", position: readyLblPos, layer: touchableLayer, horzAlign: .center)
@@ -139,11 +138,11 @@ class GameScene: SKScene {
         gameOverLayer.removeAllChildren()
     }
     
-    func startNewGame() {
+    func startNewGame(stage: Int) {
         clearLayers()
         Player.sharedIntance.resetColRow()
         
-        level = Level()
+        level = Level(stage: stage)
         addTiles()
         beginGame()
     }
@@ -290,8 +289,6 @@ class GameScene: SKScene {
  
         }
         
-        
-        
         /* Player Move */
         if !(isGamePaused)! && !isGameOver && touchedNode != nil {
             let newPlayerDirection = getDirectionOfTouch(node: touchedNode!)
@@ -303,20 +300,24 @@ class GameScene: SKScene {
     }
     
     func handleTouchOnGameOverLayer(touches: Set<UITouch>) {
-        print("entered function")
         let touch = touches.first! as UITouch
         let location = touch.location(in: gameOverLayer)
         let touchedNode = gameOverLayer.nodes(at: location).first // first is layer itself
         
         if touchedNode == gameOverLayer.childNode(withName: "NewGame") {
-            print("clocked new game node")
             gameOverLayer.isHidden = true
             isGameOver = false
-            startNewGame()
-            prepareNewGame()
+            startNewGame(stage: Game.initialStage)
+            getReadyNewGame()
         }
         
-
+        if touchedNode == gameOverLayer.childNode(withName: "RestartLevel") {
+            // TODO: WATCH ADD HERE
+            gameOverLayer.isHidden = true
+            isGameOver = false
+            startNewGame(stage: level.getStage())
+            getReadyNewGame()
+        }
     }
     // MARK: - Handle touch functions
 
@@ -407,7 +408,16 @@ class GameScene: SKScene {
             }
         }
         updateHighScore()
+        checkNextLevel()
         checkGameOver()
+    }
+    
+    func checkNextLevel() {
+        if level.enemies.count == 0 {
+            level.nextStage()
+            startNewGame(stage: level.getStage())
+            getReadyNewGame()
+        }
     }
     
     func checkGameOver() {
@@ -456,8 +466,8 @@ class GameScene: SKScene {
             objectLayer.removeChildren(in: [enemy.getSprite() as SKNode])
             
             // add to array and screen
-            let newEnemies: Set<Enemy> = [level.spawnNewEnemy(), level.spawnNewEnemy()]
-            addSprites(for: newEnemies)
+            //let newEnemies: Set<Enemy> = [level.spawnNewEnemy(), level.spawnNewEnemy()]
+            //addSprites(for: newEnemies)
         }
     }
     
