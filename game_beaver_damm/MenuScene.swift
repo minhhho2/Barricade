@@ -20,6 +20,7 @@ class MenuScene: SKScene {
     
     var buttonLayer = SKNode()
     
+    
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder) is not used in this app")
     }
@@ -42,7 +43,7 @@ class MenuScene: SKScene {
         settingLabel = SKLabelNode(fontNamed: "AvenirNext-Bold")
         settingLabel.text = "SETTING"
         settingLabel.fontSize = size.width / 10
-        settingLabel.position = CGPoint(x: 0, y: 0 - playLabel.frame.height)
+        settingLabel.position = CGPoint(x: 0, y: 0 - playLabel.frame.height * 2)
         buttonLayer.zPosition = 10
         buttonLayer.addChild(settingLabel)
         
