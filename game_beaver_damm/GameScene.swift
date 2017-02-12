@@ -432,8 +432,6 @@ class GameScene: SKScene {
 
         let restartLevelLabel = SKLabelNode()
         configureLabelNode(node: restartLevelLabel, text: "Restart Level", position: CGPoint(x: 0, y: -gameOverLabel.frame.height * 7), layer: gameOverLayer)
-
-
     }
     
     // MARK: - Handle Button Touch
