@@ -101,9 +101,7 @@ class GameScene: SKScene {
         let menuLblPos = CGPoint(x: self.size.width / 2, y: -self.size.height / 2 + settingLabel.frame.height + pauseLabel.frame.height)
         configureLabelNode(node: menuLabel, text: "MENU", position: menuLblPos, layer: touchableLayer, horzAlign: .right)
         
-        let readyLblPos = CGPoint(x: 0, y: 0)
-        configureLabelNode(node:readyLabel!, text: "Press to play!", position: readyLblPos, layer: touchableLayer, horzAlign: .center)
-
+        
         let upBtnPos = CGPoint(x: self.size.width / 2 - 2.5 * btnSize.width / 2, y: -self.size.height / 2 + 3.5 * btnSize.height)
         configureSKSpriteNode(node: upBtn, imageName: "UpArrow", position: upBtnPos, zPosition: 4, size: btnSize, alpha: 0.2)
 
@@ -117,7 +115,16 @@ class GameScene: SKScene {
         configureSKSpriteNode(node: rightBtn, imageName: "RightArrow", position: rightBtnPos, zPosition: 4, size: btnSize, alpha: 0.2)
         
         startNewGame()
+        prepareNewGame()
  
+        
+    }
+    
+    func prepareNewGame() {
+        readyLabel = SKLabelNode()
+        let readyLblPos = CGPoint(x: 0, y: 0)
+        configureLabelNode(node:readyLabel!, text: "Press to play!", position: readyLblPos, layer: touchableLayer, horzAlign: .center)
+        
         /* Pause game at the start to run ready text*/
         let pauseAction = SKAction.run {
             self.view?.isPaused = true
@@ -296,9 +303,13 @@ class GameScene: SKScene {
         
         if touchedNode == gameOverLayer.childNode(withName: "NewGame") {
             print("clocked new game node")
+            gameOverLayer.isHidden = true
+            isGameOver = false
             startNewGame()
+            prepareNewGame()
         }
         
+
     }
     // MARK: - Handle touch functions
 
