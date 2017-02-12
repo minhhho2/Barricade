@@ -245,7 +245,7 @@ class GameScene: SKScene {
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
         let touch = touches.first! as UITouch
         let location = touch.location(in: touchableLayer)
-        let touchedNode = self.nodes(at: location).first // first is layer itself
+        let touchedNode = touchableLayer.nodes(at: location).first
 
         print("Touch at  \(location.x) - \(location.y) with count:  \(self.nodes(at: location).count)")
 
@@ -257,8 +257,13 @@ class GameScene: SKScene {
         }
         
         if !pauseLayer.isHidden {
-            handleTouchWithDisplayedPauseLayer(touchedNode: touchedNode)
+            handleTouchOnPauseLayer()
             return
+        }
+        
+        if !gameOverLayer.isHidden {
+            print("game over layer showing")
+            handleTouchOnGameOverLayer(touches: touches)
         }
         
         if touchedNode == menuLabel {
@@ -274,12 +279,26 @@ class GameScene: SKScene {
         }
         
         
+        
         /* Player Move */
         if !(isGamePaused)! && !isGameOver && touchedNode != nil {
             let newPlayerDirection = getDirectionOfTouch(node: touchedNode!)
             self.handleMove(direction: newPlayerDirection)
             return
         }
+    }
+    
+    func handleTouchOnGameOverLayer(touches: Set<UITouch>) {
+        print("entered function")
+        let touch = touches.first! as UITouch
+        let location = touch.location(in: gameOverLayer)
+        let touchedNode = gameOverLayer.nodes(at: location).first // first is layer itself
+        
+        if touchedNode == gameOverLayer.childNode(withName: "NewGame") {
+            print("clocked new game node")
+            startNewGame()
+        }
+        
     }
     // MARK: - Handle touch functions
 
@@ -300,7 +319,7 @@ class GameScene: SKScene {
     }
     
     
-    func handleTouchWithDisplayedPauseLayer(touchedNode: SKNode?) {
+    func handleTouchOnPauseLayer() {
         pauseLayer.isHidden = true
         self.view?.isPaused = false
         pauseLayer.removeAllChildren()
@@ -374,7 +393,7 @@ class GameScene: SKScene {
     }
     
     func checkGameOver() {
-        if isGameOver {
+        if isGameOver && gameOverLayer.isHidden {
             handleGameOver()
         }
     }
@@ -427,8 +446,6 @@ class GameScene: SKScene {
     func handleGameOver() {
         gameOverLayer.isHidden = false
         
-    
-        
         let gameOverLabel = SKLabelNode()
         configureLabelNode(node: gameOverLabel, text: "Game Over!", position: CGPoint(x: 0, y: 0), layer: gameOverLayer, horzAlign: .center)
         
@@ -440,10 +457,12 @@ class GameScene: SKScene {
         let newGameLabel = SKLabelNode()
         let newGameLblPos = CGPoint(x: 0, y: -gameOverLabel.frame.height * 4)
         configureLabelNode(node: newGameLabel, text: "Start New Game", position: newGameLblPos, layer: gameOverLayer, horzAlign: .center)
-
+        newGameLabel.name = "NewGame"
+        
         let restartLevelLabel = SKLabelNode()
         let restartLevelLbl = CGPoint(x: 0, y: -gameOverLabel.frame.height * 6)
         configureLabelNode(node: restartLevelLabel, text: "Restart Level", position: restartLevelLbl, layer: gameOverLayer, horzAlign: .center)
+        restartLevelLabel.name = "RestartLevel"
     }
     
     // MARK: - Handle Button Touch
