@@ -15,7 +15,7 @@ class Player: Monster {
     static let sharedIntance = Player(col: 0, row: 0)
 
     private init(col: Int, row: Int) {
-        super.init(col: col, row: row, imageName: Constants.BEAVER_SPRITE)
+        super.init(col: col, row: row, imageName: Constants.playerSprite)
     }
     
     func resetColRow() {

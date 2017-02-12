@@ -132,10 +132,15 @@ class GameScene: SKScene {
         self.run(pauseAction)
     }
     
-    func startNewGame() {
+    func clearLayers() {
         objectLayer.removeAllChildren()
         tileLayer.removeAllChildren()
+        pauseLayer.removeAllChildren()
         gameOverLayer.removeAllChildren()
+    }
+    
+    func startNewGame() {
+        clearLayers()
         Player.sharedIntance.resetColRow()
         
         level = Level()
@@ -290,6 +295,8 @@ class GameScene: SKScene {
         /* Player Move */
         if !(isGamePaused)! && !isGameOver && touchedNode != nil {
             let newPlayerDirection = getDirectionOfTouch(node: touchedNode!)
+            let newImage = "Player\(newPlayerDirection.rawValue)"
+            Player.sharedIntance.getSprite().texture = SKTexture(imageNamed: newImage)
             self.handleMove(direction: newPlayerDirection)
             return
         }

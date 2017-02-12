@@ -10,12 +10,12 @@ import Foundation
 import SpriteKit
 
 enum Direction: String {
-    case none = "none", up = "up", down = "down", left = "left", right = "right"
+    case none = "None", up = "Up", down = "Down", left = "Left", right = "Right"
 }
 
 struct Constants {
     /* Initial Sprites */
-    static let BEAVER_SPRITE: String = "Beaver"
+    static let playerSprite: String = "PlayerDown"
     static let CROC_SRITE: String = "Croc"
     static let BLOCK_SPRITE: String = "Block"
     
