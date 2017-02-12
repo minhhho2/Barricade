@@ -16,6 +16,8 @@ class MenuScene: SKScene {
     var bannerView: GADBannerView!
     
     var playLabel = SKLabelNode()
+    var settingLabel = SKLabelNode()
+    
     var buttonLayer = SKNode()
     
     required init?(coder aDecoder: NSCoder) {
@@ -30,10 +32,21 @@ class MenuScene: SKScene {
         
         // Start Label
         playLabel = SKLabelNode(fontNamed: "AvenirNext-Bold")
-        playLabel.text = "New Game"
+        playLabel.text = "PLAY"
         playLabel.fontSize = size.width / 10
+        playLabel.position = CGPoint(x: 0, y: 0)
         buttonLayer.zPosition = 10
         buttonLayer.addChild(playLabel)
+        
+        // Setting
+        settingLabel = SKLabelNode(fontNamed: "AvenirNext-Bold")
+        settingLabel.text = "SETTING"
+        settingLabel.fontSize = size.width / 10
+        settingLabel.position = CGPoint(x: 0, y: 0 - playLabel.frame.height)
+        buttonLayer.zPosition = 10
+        buttonLayer.addChild(settingLabel)
+        
+        // Score
     }
     
     override func didMove(to view: SKView) {
