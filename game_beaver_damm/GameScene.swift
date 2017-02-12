@@ -35,6 +35,7 @@ class GameScene: SKScene {
     /* Game Buttons and Text*/
     var menuLabel = SKLabelNode()
     var pauseLabel = SKLabelNode()
+    var settingLabel = SKLabelNode()
     var readyLabel: SKLabelNode? = SKLabelNode()
     
     var scoreLabel = SKLabelNode()
@@ -59,7 +60,7 @@ class GameScene: SKScene {
     
     override init(size: CGSize) {
         TileWidth = (size.width * 1.0 ) / CGFloat(Game.numCols)
-        TileHeight = (size.height * 0.8) / CGFloat(Game.numRows)
+        TileHeight = (size.height * 0.75) / CGFloat(Game.numRows)
         
         print("New Game Scene")
         /* Configure and add background */
@@ -82,24 +83,27 @@ class GameScene: SKScene {
         gameOverLayer.isHidden = true
     
         /* Create and configure score labels */
-        let scorePos = CGPoint(x: 0, y: -self.size.height / 2)
-        configureLabelNode(node: scoreLabel, text: "Score: \(score)", position: scorePos, layer: gameLayer)
+        let scorePos = CGPoint(x: -self.size.width / 2, y: -self.size.height / 2)
+        configureLabelNode(node: scoreLabel, text: "SCORE: ", position: scorePos, layer: gameLayer, horzAlign: .left)
         
-        let highScorePos = CGPoint(x: 0, y: -self.size.height / 2 + scoreLabel.frame.height)
-        configureLabelNode(node: highScoreLabel, text: "Score: \(highScore)", position: highScorePos, layer: gameLayer)
+        let highScorePos = CGPoint(x: -self.size.width / 2, y: -self.size.height / 2 + scoreLabel.frame.height)
+        configureLabelNode(node: highScoreLabel, text: "HIGH SCORE: ", position: highScorePos, layer: gameLayer, horzAlign: .left)
         
         /* Create and configure buttons and labels */
         let btnSize = CGSize(width: TileWidth * 2, height: TileHeight * 2)
         
-        let pauseLblPos = CGPoint(x: -self.size.width / 2, y: -self.size.height / 2)
-        configureLabelNode(node: pauseLabel, text: "Pause", position: pauseLblPos, layer: touchableLayer)
+        let settingLblPos = CGPoint(x: self.size.width / 2, y: -self.size.height / 2)
+        configureLabelNode(node: settingLabel, text: "SETTING", position: settingLblPos, layer: touchableLayer, horzAlign: .right)
         
-        let menuLblPos = CGPoint(x: -self.size.width / 2, y: -self.size.height / 2 + pauseLabel.frame.height)
-        configureLabelNode(node: menuLabel, text: "Menu", position: menuLblPos, layer: touchableLayer)
+        let pauseLblPos = CGPoint(x: self.size.width / 2, y: -self.size.height / 2 + settingLabel.frame.height)
+        configureLabelNode(node: pauseLabel, text: "PAUSE", position: pauseLblPos, layer: touchableLayer, horzAlign: .right)
+        
+        let menuLblPos = CGPoint(x: self.size.width / 2, y: -self.size.height / 2 + settingLabel.frame.height + pauseLabel.frame.height)
+        configureLabelNode(node: menuLabel, text: "MENU", position: menuLblPos, layer: touchableLayer, horzAlign: .right)
         
         let readyLblPos = CGPoint(x: 0, y: 0)
-        configureLabelNode(node:readyLabel!, text: "Press to play!", position: readyLblPos, layer: touchableLayer)
-        
+        configureLabelNode(node:readyLabel!, text: "Press to play!", position: readyLblPos, layer: touchableLayer, horzAlign: .center)
+
         let upBtnPos = CGPoint(x: self.size.width / 2 - 2.5 * btnSize.width / 2, y: -self.size.height / 2 + 3.5 * btnSize.height)
         configureSKSpriteNode(node: upBtn, imageName: "UpArrow", position: upBtnPos, zPosition: 4, size: btnSize, alpha: 1)
 
@@ -120,12 +124,13 @@ class GameScene: SKScene {
         }
         self.run(pauseAction)
     }
+    
     func startNewGame() {
         objectLayer.removeAllChildren()
         tileLayer.removeAllChildren()
         gameOverLayer.removeAllChildren()
-        
         Player.sharedIntance.resetColRow()
+        
         level = Level()
         addTiles()
         beginGame()
@@ -137,12 +142,13 @@ class GameScene: SKScene {
         parentLayer.addChild(childLayer)
     }
     
-    func configureLabelNode(node: SKLabelNode, text: String, position: CGPoint, layer: SKNode) {
+    func configureLabelNode(node: SKLabelNode, text: String, position: CGPoint, layer: SKNode, horzAlign: SKLabelHorizontalAlignmentMode) {
         node.text = text
-        node.fontSize = size.width / 13
+        node.fontName = "AvenirNext-Bold"
+        node.fontSize = size.width / 15
         node.position = position
         node.zPosition = 10
-        node.horizontalAlignmentMode = .left
+        node.horizontalAlignmentMode = horzAlign
         node.verticalAlignmentMode = .bottom
         layer.addChild(node)
     }
@@ -208,8 +214,8 @@ class GameScene: SKScene {
         self.highScore = highscore as! Int
         
         //Set Score Text
-        scoreLabel.text = "Score: \(score)"
-        highScoreLabel.text = "High Score: \(highScore)"
+        scoreLabel.text = "SCORE: \(score)"
+        highScoreLabel.text = "HIGH SCORE: \(highScore)"
 
     }
 
@@ -376,13 +382,13 @@ class GameScene: SKScene {
             let secondDefaults: UserDefaults = UserDefaults.standard
             secondDefaults.set(highScore, forKey: "Highscore")
             secondDefaults.synchronize()
-            highScoreLabel.text = "High Score: \(highScore)"
+            highScoreLabel.text = "HIGH SCORE: \(highScore)"
         }
     }
     
     func addScore() {
         self.score += 1
-        scoreLabel.text = "Score: \(score)"
+        scoreLabel.text = "SCORE: \(score)"
     }
     
     func updateEnemyStates() {
@@ -418,20 +424,25 @@ class GameScene: SKScene {
     func handleGameOver() {
         gameOverLayer.isHidden = false
         
+        
         let gameOverLabel = SKLabelNode()
-        configureLabelNode(node: gameOverLabel, text: "Game Over!", position: CGPoint(x: 0, y: 0), layer: gameOverLayer)
+        configureLabelNode(node: gameOverLabel, text: "Game Over!", position: CGPoint(x: 0, y: 0), layer: gameOverLayer, horzAlign: .center)
         
         let scoreLabel = SKLabelNode()
-        configureLabelNode(node: scoreLabel, text: "Score: \(score)", position: CGPoint(x: 0, y: -gameOverLabel.frame.height), layer: gameOverLayer)
+        let scoreLblPos = CGPoint(x: 0, y: -gameOverLabel.frame.height)
+        configureLabelNode(node: scoreLabel, text: "SCORE: \(score)", position: scoreLblPos, layer: gameOverLayer, horzAlign: .center)
 
         let highScoreLabel = SKLabelNode()
-        configureLabelNode(node: highScoreLabel, text: "High Score: \(highScore)", position: CGPoint(x: 0, y: -gameOverLabel.frame.height * 3), layer: gameOverLayer)
+        let highScoreLblPos = CGPoint(x: 0, y: -gameOverLabel.frame.height * 3)
+        configureLabelNode(node: highScoreLabel, text: "HIGH SCORE: \(highScore)", position: highScoreLblPos, layer: gameOverLayer, horzAlign: .center)
         
         let newGameLabel = SKLabelNode()
-        configureLabelNode(node: newGameLabel, text: "Start New Game", position: CGPoint(x: 0, y: -gameOverLabel.frame.height * 5), layer: gameOverLayer)
+        let newGameLblPos = CGPoint(x: 0, y: -gameOverLabel.frame.height * 5)
+        configureLabelNode(node: newGameLabel, text: "Start New Game", position: newGameLblPos, layer: gameOverLayer, horzAlign: .center)
 
         let restartLevelLabel = SKLabelNode()
-        configureLabelNode(node: restartLevelLabel, text: "Restart Level", position: CGPoint(x: 0, y: -gameOverLabel.frame.height * 7), layer: gameOverLayer)
+        let restartLevelLbl = CGPoint(x: 0, y: -gameOverLabel.frame.height * 7)
+        configureLabelNode(node: restartLevelLabel, text: "Restart Level", position: restartLevelLbl, layer: gameOverLayer, horzAlign: .center)
     }
     
     // MARK: - Handle Button Touch
