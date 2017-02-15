@@ -18,7 +18,15 @@ class MenuScene: SKScene {
     var playLabel = SKLabelNode()
     var settingLabel = SKLabelNode()
     
+    var easyLabel = SKLabelNode()
+    var medLabel = SKLabelNode()
+    var hardLabel = SKLabelNode()
+    
+    
     var buttonLayer = SKNode()
+    
+    var difficulty: TimeInterval = Difficulty.easy
+    var difficultyOptions: Array<SKNode> = []
     
     
     required init?(coder aDecoder: NSCoder) {
@@ -31,24 +39,39 @@ class MenuScene: SKScene {
         self.anchorPoint = CGPoint(x: 0.5, y: 0.5)
         self.addChild(buttonLayer)
         
-        // Start Label
-        playLabel = SKLabelNode(fontNamed: "AvenirNext-Bold")
-        playLabel.text = "PLAY"
-        playLabel.fontSize = size.width / 10
-        playLabel.position = CGPoint(x: 0, y: 0)
-        buttonLayer.zPosition = 10
-        buttonLayer.addChild(playLabel)
+        difficultyOptions = [easyLabel,
+                             medLabel,
+                             hardLabel]
         
-        // Setting
-        settingLabel = SKLabelNode(fontNamed: "AvenirNext-Bold")
-        settingLabel.text = "SETTING"
-        settingLabel.fontSize = size.width / 10
-        settingLabel.position = CGPoint(x: 0, y: 0 - playLabel.frame.height * 2)
-        buttonLayer.zPosition = 10
-        buttonLayer.addChild(settingLabel)
+        let centre = CGPoint(x: 0, y: 0)
+        configureLabelNode(node: playLabel, text: "PLAY", position: centre, layer: buttonLayer)
+        let settingLblPos = CGPoint(x: 0, y: playLabel.position.y - playLabel.frame.height * 2)
+        configureLabelNode(node: settingLabel, text: "SETTING", position: settingLblPos, layer: buttonLayer)
+
+        let easyLblPos = CGPoint(x: 0, y: settingLabel.position.y - settingLabel.frame.height * 2)
+        configureLabelNode(node: easyLabel, text: "EASY", position: easyLblPos, layer: buttonLayer)
         
-        // Score
+        let medLblPos = CGPoint(x: 0, y: easyLabel.position.y - easyLabel.frame.height * 2)
+        configureLabelNode(node: medLabel, text: "MEDIUM", position: medLblPos, layer: buttonLayer)
+        
+        let hardLblPos = CGPoint(x: 0, y: medLabel.position.y - medLabel.frame.height * 2)
+        configureLabelNode(node: hardLabel, text: "HARD", position: hardLblPos, layer: buttonLayer)
+        
+        
+        
+
+        
     }
+    
+    func configureLabelNode(node: SKLabelNode, text: String, position: CGPoint, layer: SKNode) {
+        node.text = text
+        node.fontSize = size.width / 10
+        node.fontName = "AvenirNext-Bold"
+        node.position = position
+        node.zPosition = 10
+        layer.addChild(node)
+    }
+    
     
     override func didMove(to view: SKView) {
         if bannerView == nil {
@@ -78,13 +101,29 @@ class MenuScene: SKScene {
         let touchedNode = buttonLayer.nodes(at: location!).first
         
         if touchedNode == playLabel {
-            let scene: SKScene = GameScene(size: self.size)
+            let scene: SKScene = GameScene(size: self.size, difficulty: difficulty)
             let skView = self.view! as SKView
             skView.ignoresSiblingOrder = true
             scene.scaleMode = .aspectFill
             scene.size = skView.bounds.size
             skView.presentScene(scene)
         }
+        
+        if touchedNode != nil && difficultyOptions.contains(touchedNode!) {
+            setDifficulty(node: touchedNode!)
+        }
+    }
+    
+    func setDifficulty(node: SKNode) {
+        print("old mode: \(difficulty)")
+        switch node {
+        case easyLabel: difficulty = Difficulty.easy
+        case medLabel: difficulty = Difficulty.med
+        case hardLabel: difficulty = Difficulty.hard
+        default: break
+        }
+        print("new mode: \(difficulty)")
+        
     }
     
 

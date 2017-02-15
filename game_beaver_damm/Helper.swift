@@ -36,13 +36,19 @@ struct Constraint {
 struct AnimationTime {
     static let player = 0.25
     static let block = 0.25
-    static let enemy = 1.0
+    static var enemy = 0.5
 }
 
 /* Tuple that represents the column and row on the board */
 struct BoardPosition {
     let col: Int
     let row: Int
+}
+
+struct Difficulty {
+    static let easy: TimeInterval = 1.0
+    static let med: TimeInterval = 0.75
+    static let hard: TimeInterval = 0.50
 }
 
 

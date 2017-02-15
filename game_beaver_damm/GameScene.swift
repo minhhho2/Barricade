@@ -18,7 +18,7 @@ class GameScene: SKScene {
     
     /* Monster move configuration */
     var lastTime: TimeInterval = 0.0
-    var moveRate : TimeInterval = 1.0
+    var moveRate : TimeInterval = 0.5
     var timeSinceMove: TimeInterval = 0.0
 
     /* Game Layers */
@@ -30,6 +30,7 @@ class GameScene: SKScene {
     let menuLayer = SKNode()
     let pauseLayer = SKNode()
     let gameOverLayer = SKNode()
+    let settingLayer = SKNode()
     
     /* Game Buttons and Text*/
     var menuLabel = SKLabelNode()
@@ -46,6 +47,8 @@ class GameScene: SKScene {
     var leftBtn = SKSpriteNode()
     var rightBtn = SKSpriteNode()
     
+    var arrowButtons: Array<SKNode> = []
+    
     /* Game variables */
     var isGameOver: Bool = false
     var score: Int = 0
@@ -57,7 +60,7 @@ class GameScene: SKScene {
         fatalError("init(coder) is not used in this app")
     }
     
-    override init(size: CGSize) {
+    init(size: CGSize, difficulty: TimeInterval) {
         TileWidth = (size.width * 1.0 ) / CGFloat(Game.numCols)
         TileHeight = (size.height * 0.75) / CGFloat(Game.numRows)
         
@@ -69,6 +72,8 @@ class GameScene: SKScene {
         background.size = size
         self.addChild(background)
         
+        moveRate = difficulty
+        
         /* Create and configure layers */
         let cornerBotLeftPoint = CGPoint(x: -TileWidth * CGFloat(Game.numCols) / 2, y: -TileHeight * CGFloat(Game.numRows) / 2)
         let centrePoint = CGPoint(x: 0, y: 0)
@@ -79,10 +84,12 @@ class GameScene: SKScene {
         configureLayer(parentLayer: gameLayer, childLayer: pauseLayer, position: centrePoint, zPosition: 6)
         configureLayer(parentLayer: gameLayer, childLayer: gameOverLayer, position: centrePoint, zPosition: 6)
         configureLayer(parentLayer: gameLayer, childLayer: menuLayer, position: centrePoint, zPosition: 6)
-
+        configureLayer(parentLayer: gameLayer, childLayer: settingLayer, position: centrePoint, zPosition: 6)
+        
         pauseLayer.isHidden = true
         gameOverLayer.isHidden = true
         menuLayer.isHidden = true
+        settingLayer.isHidden = true
     
         /* Create and configure score labels */
         let leftEdge = -self.size.width / 2
@@ -123,6 +130,8 @@ class GameScene: SKScene {
         let rightBtnPos = CGPoint(x: rightEdge - btnSize.width / 2, y: botEdge + 2.5 * btnSize.height)
         configureSKSpriteNode(node: rightBtn, imageName: "RightArrow", position: rightBtnPos, zPosition: 4, size: btnSize, alpha: 0.2)
         
+        arrowButtons = [upBtn, downBtn, leftBtn, rightBtn]
+        
         startNewGame(stage: Game.initialStage)
  
     }
@@ -149,6 +158,7 @@ class GameScene: SKScene {
         pauseLayer.removeAllChildren()
         gameOverLayer.removeAllChildren()
         menuLayer.removeAllChildren()
+        settingLayer.removeAllChildren()
         Player.sharedIntance.resetColRow()
         
         level = Level(stage: stage)
@@ -289,8 +299,12 @@ class GameScene: SKScene {
         }
         
         if !menuLayer.isHidden {
-            print("is hidden")
             handleTouchOnMenuLayer(touches: touches)
+            return
+        }
+        
+        if !settingLayer.isHidden {
+            handleTouchOnSettingLayer(touches: touches)
             return
         }
         
@@ -305,12 +319,13 @@ class GameScene: SKScene {
  
         }
         
-        // TODO: touchedNode for settingLabel
-        
-        
-        
+        if touchedNode == settingLabel {
+            handleTouchOnSettingLabel()
+            return
+        }
+
         /* Player Move */
-        if !(isGamePaused)! && !isGameOver && touchedNode != nil {
+        if !(isGamePaused)! && !isGameOver && touchedNode != nil && arrowButtons.contains(touchedNode!){
             let newPlayerDirection = getDirectionOfTouch(node: touchedNode!)
             let newImage = "Player\(newPlayerDirection.rawValue)"
             Player.sharedIntance.getSprite().texture = SKTexture(imageNamed: newImage)
@@ -321,21 +336,6 @@ class GameScene: SKScene {
     
    
     // MARK: - Handle touch functions
-
-   
-    func handleTouchOnSettingLayer() {
-        // check for touched nodes
-        // if touched node do things
-        //
-        
-    }
-   
-    func handleTouchOnSettingLabel() {
-        // create layer
-        // show layer
-        // pause game
-    }
-    
     func handleTouchOnPauseLayer() {
         pauseLayer.isHidden = true
         unpauseGame()
@@ -387,6 +387,18 @@ class GameScene: SKScene {
             menuLayer.isHidden = true
             unpauseGame()
         }
+        
+    }
+    
+    func handleTouchOnSettingLayer(touches: Set<UITouch>){
+        
+    }
+    
+    func handleTouchOnSettingLabel() {
+        
+      
+        settingLayer.isHidden = false
+        pauseGame()
     }
     
     func handleTouchOnMenuLabel() {
@@ -423,6 +435,7 @@ class GameScene: SKScene {
         pauseLayer.isHidden = false
         pauseGame()
     }
+    
     
     func handleFirstTouchReadyText() {
         readyLabel?.removeFromParent()
