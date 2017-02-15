@@ -21,6 +21,9 @@ struct Constants {
     
 }
 
+struct Message {
+    static let newGame = "Tap To Play"
+}
 struct Game {
     // Odd number for pretty board
     static let numRows: Int = 13

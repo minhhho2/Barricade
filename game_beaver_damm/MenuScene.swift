@@ -15,19 +15,21 @@ class MenuScene: SKScene {
     var viewController: GameViewController!
     var bannerView: GADBannerView!
     
+    /* UI Label */
     var playLabel = SKLabelNode()
     var settingLabel = SKLabelNode()
     
+    /* Mode UI Label */
     var easyLabel = SKLabelNode()
     var medLabel = SKLabelNode()
     var hardLabel = SKLabelNode()
     
-    
+    /* Layer */
     var buttonLayer = SKNode()
     
+    /* Data */
     var difficulty: TimeInterval = Difficulty.easy
     var difficultyOptions: Array<SKNode> = []
-    
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder) is not used in this app")
@@ -95,7 +97,6 @@ class MenuScene: SKScene {
     }
     
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
-        print("touched")
         let touch = touches.first
         let location = touch?.location(in: buttonLayer)
         let touchedNode = buttonLayer.nodes(at: location!).first

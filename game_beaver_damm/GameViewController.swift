@@ -12,9 +12,6 @@ import GameplayKit
 
 class GameViewController: UIViewController {
     
-    var level: Level!
-
-    
     // MARK: - Default functions
     override var prefersStatusBarHidden: Bool {
         return true
@@ -26,13 +23,10 @@ class GameViewController: UIViewController {
     
     override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
         return [.portrait, .portraitUpsideDown]
-        //return [.landscapeLeft, .landscapeRight]
     }
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        print("game view controller")
-
         
         let skView = view as! SKView
         let size = skView.bounds.size
@@ -48,8 +42,5 @@ class GameViewController: UIViewController {
         skView.showsFPS = true
         skView.showsNodeCount = true
         
-      
-        
     }
-
 }

@@ -357,7 +357,7 @@ class GameScene: SKScene {
 
         if touchedNode == newGameLabel {
             startNewGame(stage: Game.initialStage)
-            levelMessage(message: "Tap To Play!")
+            levelMessage(message: Message.newGame)
         }
         
         if touchedNode == restartLevelLabel {
@@ -391,12 +391,33 @@ class GameScene: SKScene {
     }
     
     func handleTouchOnSettingLayer(touches: Set<UITouch>){
+        let touch = touches.first! as UITouch
+        let location = touch.location(in: menuLayer)
+        let touchedNode = settingLayer.nodes(at: location).first
         
+        if touchedNode == settingLayer.childNode(withName: "Cancel") {
+            settingLayer.removeAllChildren()
+            settingLayer.isHidden = true
+            unpauseGame()
+        }
+        
+        if touchedNode == settingLayer.childNode(withName: "Save") {
+            print("save !")
+            settingLayer.removeAllChildren()
+            settingLayer.isHidden = true
+            unpauseGame()
+        }
     }
     
     func handleTouchOnSettingLabel() {
-        
-      
+        let saveLabel = SKLabelNode()
+        let saveLblPos = CGPoint(x: -self.size.width / 4, y: 0)
+        configureLabelNode(node: saveLabel, text: "SAVE", position: saveLblPos, layer: settingLayer, horzAlign: .center)
+        saveLabel.name = "Save"
+        let cancelLabel = SKLabelNode()
+        let cancelLblPos = CGPoint(x: self.size.width / 4, y: 0)
+        configureLabelNode(node: cancelLabel, text: "CANCEL", position: cancelLblPos, layer: settingLayer, horzAlign: .center)
+        cancelLabel.name = "Cancel"
         settingLayer.isHidden = false
         pauseGame()
     }
@@ -430,7 +451,7 @@ class GameScene: SKScene {
         pauseLayer.addChild(pauseBG)
 
         let resumeGame = SKLabelNode()
-        configureLabelNode(node: resumeGame, text: "Press To Resume", position: centre, layer: pauseLayer, horzAlign: .center)
+        configureLabelNode(node: resumeGame, text: Message.newGame, position: centre, layer: pauseLayer, horzAlign: .center)
         
         pauseLayer.isHidden = false
         pauseGame()
