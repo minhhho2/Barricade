@@ -8,20 +8,19 @@
 
 import SpriteKit
 import GameplayKit
+import GoogleMobileAds
+
+protocol InterstitialDelegate {
+    func showInterstitialAd()
+    func printLine()
+}
 
 class GameScene: SKScene {
-    var level: Level!
+    var viewController: GameViewController!
     
-    /* Tile Size */
-    let TileWidth: CGFloat
-    let TileHeight: CGFloat
+    var interstitialDelegate: InterstitialDelegate?
     
-    /* Monster move configuration */
-    var lastTime: TimeInterval = 0.0
-    var moveRate : TimeInterval = 0.5
-    var timeSinceMove: TimeInterval = 0.0
-
-    /* Game Layers */
+    // MARK: - Game Layers
     let gameLayer = SKNode()
     let tileLayer = SKNode()
     let objectLayer = SKNode()
@@ -32,30 +31,39 @@ class GameScene: SKScene {
     let gameOverLayer = SKNode()
     let settingLayer = SKNode()
     
-    /* Game Buttons and Text*/
+    // MARK: - UI Labels
     var menuLabel = SKLabelNode()
     var pauseLabel = SKLabelNode()
     var settingLabel = SKLabelNode()
     var readyLabel: SKLabelNode? = SKLabelNode()
     
+    // MARK: - Score Labels
     var scoreLabel = SKLabelNode()
     var highScoreLabel = SKLabelNode()
-    
 
+    // MARK: - UI Buttons
     var upBtn = SKSpriteNode()
     var downBtn = SKSpriteNode()
     var leftBtn = SKSpriteNode()
     var rightBtn = SKSpriteNode()
     
-    var arrowButtons: Array<SKNode> = []
     
     /* Game variables */
     var isGameOver: Bool = false
     var score: Int = 0
     var highScore: Int = 0
+    var arrowButtons: Array<SKNode> = []
+    var level: Level!
+
+    let TileWidth: CGFloat
+    let TileHeight: CGFloat
     
-    
-    
+    /* Monster move configuration */
+    var lastTime: TimeInterval = 0.0
+    var moveRate : TimeInterval = 0.5
+    var timeSinceMove: TimeInterval = 0.0
+
+
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder) is not used in this app")
     }
@@ -64,7 +72,6 @@ class GameScene: SKScene {
         TileWidth = (size.width * 1.0 ) / CGFloat(Game.numCols)
         TileHeight = (size.height * 0.75) / CGFloat(Game.numRows)
         
-        print("New Game Scene")
         /* Configure and add background */
         super.init(size: size)
         self.anchorPoint = CGPoint(x: 0.5, y: 0.5)
@@ -136,11 +143,14 @@ class GameScene: SKScene {
  
     }
     
+    // MARK: - General
+    
     func levelMessage(message: String) {
         readyLabel = SKLabelNode()
         let readyLblPos = CGPoint(x: 0, y: 0)
         configureLabelNode(node:readyLabel!, text: message, position: readyLblPos, layer: touchableLayer, horzAlign: .center)
     }
+    
     func pauseGame() {
         let pauseAction = SKAction.run {
             self.view?.isPaused = true
@@ -151,22 +161,7 @@ class GameScene: SKScene {
     func unpauseGame() {
         self.view?.isPaused = false
     }
-
-    func startNewGame(stage: Int) {
-        objectLayer.removeAllChildren()
-        tileLayer.removeAllChildren()
-        pauseLayer.removeAllChildren()
-        gameOverLayer.removeAllChildren()
-        menuLayer.removeAllChildren()
-        settingLayer.removeAllChildren()
-        Player.sharedIntance.resetColRow()
-        
-        level = Level(stage: stage)
-        addTiles()
-        beginGame()
-        pauseGame()
-    }
-
+    
     func configureLayer(parentLayer: SKNode, childLayer: SKNode, position: CGPoint, zPosition: CGFloat) {
         childLayer.position = position
         childLayer.zPosition = zPosition
@@ -193,7 +188,24 @@ class GameScene: SKScene {
         touchableLayer.addChild(node)
     }
     
-    // MARK: - Game Setup
+    
+    
+    // MARK: - New Game Flow
+    func startNewGame(stage: Int) {
+        objectLayer.removeAllChildren()
+        tileLayer.removeAllChildren()
+        pauseLayer.removeAllChildren()
+        gameOverLayer.removeAllChildren()
+        menuLayer.removeAllChildren()
+        settingLayer.removeAllChildren()
+        Player.sharedIntance.resetColRow()
+        
+        level = Level(stage: stage)
+        addTiles()
+        beginGame()
+        pauseGame()
+    }
+    
     func beginGame() {
         shuffle()
     }
@@ -335,11 +347,89 @@ class GameScene: SKScene {
     }
     
    
-    // MARK: - Handle touch functions
-    func handleTouchOnPauseLayer() {
-        pauseLayer.isHidden = true
+    // MARK: - Handle touch on Label
+    func hideLayerUnpauseGame(layer: SKNode) {
+        layer.removeAllChildren()
+        layer.isHidden = true
         unpauseGame()
-        pauseLayer.removeAllChildren()
+    }
+    
+    func showLayerPauseGame(layer: SKNode) {
+        layer.isHidden = false
+        pauseGame()
+    }
+    func handleTouchOnSettingLayer(touches: Set<UITouch>){
+        let touch = touches.first! as UITouch
+        let location = touch.location(in: menuLayer)
+        let touchedNode = settingLayer.nodes(at: location).first
+        
+        if touchedNode == settingLayer.childNode(withName: "Cancel") {
+            hideLayerUnpauseGame(layer: settingLayer)
+        }
+        
+        if touchedNode == settingLayer.childNode(withName: "Save") {
+            hideLayerUnpauseGame(layer: settingLayer)
+        }
+    }
+    
+    func handleTouchOnSettingLabel() {
+        let saveLabel = SKLabelNode()
+        let saveLblPos = CGPoint(x: -self.size.width / 4, y: 0)
+        configureLabelNode(node: saveLabel, text: "SAVE", position: saveLblPos, layer: settingLayer, horzAlign: .center)
+        saveLabel.name = "Save"
+        
+        let cancelLabel = SKLabelNode()
+        let cancelLblPos = CGPoint(x: self.size.width / 4, y: 0)
+        configureLabelNode(node: cancelLabel, text: "CANCEL", position: cancelLblPos, layer: settingLayer, horzAlign: .center)
+        cancelLabel.name = "Cancel"
+        
+        showLayerPauseGame(layer: settingLayer)
+    }
+    
+    func handleTouchOnMenuLabel() {
+        let centre = CGPoint(x: 0, y: 0)
+        let menuMessage = SKLabelNode()
+        configureLabelNode(node: menuMessage, text: "Leaving Game, Are You Sure?", position: centre, layer: menuLayer, horzAlign: .center)
+        
+        let yesLabel = SKLabelNode()
+        let yesPos = CGPoint(x: 0, y: 0 - menuMessage.frame.height * 2)
+        configureLabelNode(node: yesLabel, text: "Yes", position: yesPos, layer: menuLayer, horzAlign: .center)
+        yesLabel.name = "Yes"
+        
+        let cancelLabel = SKLabelNode()
+        let cancelPos = CGPoint(x: 0, y: 0 - menuMessage.frame.height * 4)
+        configureLabelNode(node: cancelLabel, text: "No", position: cancelPos, layer: menuLayer, horzAlign: .center)
+        cancelLabel.name = "Cancel"
+
+        showLayerPauseGame(layer: menuLayer)
+        
+    }
+    
+    func handleTouchOnPauseLabel() {
+        let centre = CGPoint(x: 0, y: 0)
+        let pauseBG = SKSpriteNode(imageNamed: "MenuBG")
+        pauseBG.zPosition = 6
+        pauseBG.size = self.size
+        pauseBG.position = centre
+        pauseLayer.addChild(pauseBG)
+        
+        let resumeGame = SKLabelNode()
+        configureLabelNode(node: resumeGame, text: Message.newGame, position: centre, layer: pauseLayer, horzAlign: .center)
+        
+        showLayerPauseGame(layer: pauseLayer)
+    }
+    
+    
+    func handleFirstTouchReadyText() {
+        readyLabel?.removeFromParent()
+        readyLabel = nil
+        unpauseGame()
+    }
+
+    
+    // MARK: - Handle touch on Layers
+    func handleTouchOnPauseLayer() {
+        hideLayerUnpauseGame(layer: pauseLayer)
     }
     
     func handleTouchOnGameOverLayer(touches: Set<UITouch>) {
@@ -361,7 +451,7 @@ class GameScene: SKScene {
         }
         
         if touchedNode == restartLevelLabel {
-            // TODO: WATCH ADD HERE
+            self.interstitialDelegate?.showInterstitialAd()            
             startNewGame(stage: level.getStage())
             levelMessage(message: "Restart Level! Tap To Continue!")
         }
@@ -383,88 +473,12 @@ class GameScene: SKScene {
         }
         
         if touchedNode == menuLayer.childNode(withName: "Cancel") {
-            menuLayer.removeAllChildren()
-            menuLayer.isHidden = true
-            unpauseGame()
+            hideLayerUnpauseGame(layer: menuLayer)
         }
         
     }
     
-    func handleTouchOnSettingLayer(touches: Set<UITouch>){
-        let touch = touches.first! as UITouch
-        let location = touch.location(in: menuLayer)
-        let touchedNode = settingLayer.nodes(at: location).first
-        
-        if touchedNode == settingLayer.childNode(withName: "Cancel") {
-            settingLayer.removeAllChildren()
-            settingLayer.isHidden = true
-            unpauseGame()
-        }
-        
-        if touchedNode == settingLayer.childNode(withName: "Save") {
-            print("save !")
-            settingLayer.removeAllChildren()
-            settingLayer.isHidden = true
-            unpauseGame()
-        }
-    }
-    
-    func handleTouchOnSettingLabel() {
-        let saveLabel = SKLabelNode()
-        let saveLblPos = CGPoint(x: -self.size.width / 4, y: 0)
-        configureLabelNode(node: saveLabel, text: "SAVE", position: saveLblPos, layer: settingLayer, horzAlign: .center)
-        saveLabel.name = "Save"
-        let cancelLabel = SKLabelNode()
-        let cancelLblPos = CGPoint(x: self.size.width / 4, y: 0)
-        configureLabelNode(node: cancelLabel, text: "CANCEL", position: cancelLblPos, layer: settingLayer, horzAlign: .center)
-        cancelLabel.name = "Cancel"
-        settingLayer.isHidden = false
-        pauseGame()
-    }
-    
-    func handleTouchOnMenuLabel() {
-        let centre = CGPoint(x: 0, y: 0)
-        let menuMessage = SKLabelNode()
-        configureLabelNode(node: menuMessage, text: "Leaving Game, Are You Sure?", position: centre, layer: menuLayer, horzAlign: .center)
-       
-        let yesLabel = SKLabelNode()
-        let yesPos = CGPoint(x: 0, y: 0 - menuMessage.frame.height * 2)
-        configureLabelNode(node: yesLabel, text: "Yes", position: yesPos, layer: menuLayer, horzAlign: .center)
-        yesLabel.name = "Yes"
-        
-        let cancelLabel = SKLabelNode()
-        let cancelPos = CGPoint(x: 0, y: 0 - menuMessage.frame.height * 4)
-        configureLabelNode(node: cancelLabel, text: "No", position: cancelPos, layer: menuLayer, horzAlign: .center)
-        cancelLabel.name = "Cancel"
-
-        menuLayer.isHidden = false
-        pauseGame()
-        
-    }
-    
-    func handleTouchOnPauseLabel() {
-        let centre = CGPoint(x: 0, y: 0)
-        let pauseBG = SKSpriteNode(imageNamed: "MenuBG")
-        pauseBG.zPosition = 6
-        pauseBG.size = self.size
-        pauseBG.position = centre
-        pauseLayer.addChild(pauseBG)
-
-        let resumeGame = SKLabelNode()
-        configureLabelNode(node: resumeGame, text: Message.newGame, position: centre, layer: pauseLayer, horzAlign: .center)
-        
-        pauseLayer.isHidden = false
-        pauseGame()
-    }
-    
-    
-    func handleFirstTouchReadyText() {
-        readyLabel?.removeFromParent()
-        readyLabel = nil
-        unpauseGame()
-    }
-
-    // MARK: - End of turn
+    // MARK: - Enemy move
     func checkEnemyCanMove(_ frameRate: TimeInterval) {
         timeSinceMove += frameRate
         
@@ -512,6 +526,7 @@ class GameScene: SKScene {
         checkGameOver()
     }
     
+    // MARK: - Routine check
     func checkNextLevel() {
         if level.enemies.count == 0 {
             level.nextStage()
@@ -653,7 +668,6 @@ class GameScene: SKScene {
         case rightBtn: return Direction.right
         default: return Direction.none
         }
-
     }
     
     /* Convert (col, row) to point */
@@ -744,7 +758,6 @@ class GameScene: SKScene {
             let index = possibleMoves.index(of: oppositeDirection)
             possibleMoves.remove(at: index!)
         }
-        
         return  possibleMoves
     }
 

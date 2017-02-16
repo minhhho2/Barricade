@@ -9,8 +9,17 @@
 import UIKit
 import SpriteKit
 import GameplayKit
+import GoogleMobileAds
 
-class GameViewController: UIViewController {
+class GameViewController: UIViewController, GADInterstitialDelegate, InterstitialDelegate {
+    
+    var menuScene: MenuScene?
+    var gameScene: GameScene?
+    
+    var bannerView: GADBannerView!
+    var interstitialAd : GADInterstitial!
+
+
     
     // MARK: - Default functions
     override var prefersStatusBarHidden: Bool {
@@ -28,11 +37,77 @@ class GameViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+
         let skView = view as! SKView
         let size = skView.bounds.size
         let scene = MenuScene(size: size)
         
         scene.viewController = self
+
+        scene.scaleMode = .aspectFill
+        scene.size = size
+        skView.isMultipleTouchEnabled = false
+        skView.ignoresSiblingOrder = true
+        skView.presentScene(scene)
+        skView.showsFPS = true
+        skView.showsNodeCount = true
+        
+        //scene.sceneDelegate = self
+        
+        if bannerView == nil {
+            initializeBanner()
+        }
+        
+        loadRequest()
+        
+        interstitialAd = createAndLoadInterstitial()
+    }
+    
+    // MARK: - AdMob Functions
+    func loadRequest() {
+        let request = GADRequest()
+        
+        request.testDevices = [kGADSimulatorID]
+        bannerView.load(request)
+    }
+    
+    func initializeBanner() {
+        // Create a banner ad and add it to the view hierarchy.
+        bannerView = GADBannerView(adSize: kGADAdSizeSmartBannerPortrait)
+        bannerView.adUnitID = "ca-app-pub-3940256099942544/2934735716"
+        bannerView.rootViewController = self
+        
+        view!.addSubview(bannerView)
+    }
+    
+    func createAndLoadInterstitial() -> GADInterstitial {
+        let interstitialAd = GADInterstitial(adUnitID: "ca-app-pub-3940256099942544/4411468910")
+        interstitialAd.delegate = self
+        let request = GADRequest()
+        request.testDevices = [kGADSimulatorID]
+        interstitialAd.load(request)
+        return interstitialAd
+    }
+    
+    func interstitialDidDismissScreen(_ ad: GADInterstitial) {
+        interstitialAd = createAndLoadInterstitial()
+    }
+    
+    func showInterstitialAd() {
+        print("showing ad")
+        if interstitialAd.isReady {
+            interstitialAd.present(fromRootViewController: self)
+        } else {
+            print("interstitial not ready")
+        }
+    }
+    
+    func showMenuScene() {
+        let skView = view as! SKView
+        let size = skView.bounds.size
+        let scene = MenuScene(size: size)
+        scene.viewController = self
+        //scene.sceneDelegate = self
         
         scene.scaleMode = .aspectFill
         scene.size = size
@@ -43,4 +118,29 @@ class GameViewController: UIViewController {
         skView.showsNodeCount = true
         
     }
+    
+    func showGameScene(difficulty: TimeInterval) {
+        let skView = view as! SKView
+        let size = skView.bounds.size
+        let scene = GameScene(size: size, difficulty: difficulty)
+        scene.viewController = self
+        scene.scaleMode = .aspectFill
+        scene.size = size
+        skView.isMultipleTouchEnabled = false
+        skView.ignoresSiblingOrder = true
+        skView.presentScene(scene)
+        skView.showsFPS = true
+        skView.showsNodeCount = true
+        
+    }
+    
+    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
+        print("touch")
+        //showInterstitialAd()
+    }
+    
+    func printLine() {
+        print("Printing Line")
+    }
+    
 }

@@ -10,7 +10,6 @@ import UIKit
 import SpriteKit
 import GoogleMobileAds
 
-
 class MenuScene: SKScene {
     var viewController: GameViewController!
     var bannerView: GADBannerView!
@@ -41,9 +40,7 @@ class MenuScene: SKScene {
         self.anchorPoint = CGPoint(x: 0.5, y: 0.5)
         self.addChild(buttonLayer)
         
-        difficultyOptions = [easyLabel,
-                             medLabel,
-                             hardLabel]
+        difficultyOptions = [easyLabel, medLabel, hardLabel]
         
         let centre = CGPoint(x: 0, y: 0)
         configureLabelNode(node: playLabel, text: "PLAY", position: centre, layer: buttonLayer)
@@ -59,10 +56,6 @@ class MenuScene: SKScene {
         let hardLblPos = CGPoint(x: 0, y: medLabel.position.y - medLabel.frame.height * 2)
         configureLabelNode(node: hardLabel, text: "HARD", position: hardLblPos, layer: buttonLayer)
         
-        
-        
-
-        
     }
     
     func configureLabelNode(node: SKLabelNode, text: String, position: CGPoint, layer: SKNode) {
@@ -76,15 +69,18 @@ class MenuScene: SKScene {
     
     
     override func didMove(to view: SKView) {
+        /*
         if bannerView == nil {
             initializeBanner()
         }
         loadRequest()
-    }
+        */
+ }
     
+    // MARK: - AdMob Functions
     func loadRequest() {
         let request = GADRequest()
-        request.testDevices = [kGADSimulatorID]//, "22ed9df524b90565f5e15t23ad232415"]
+        request.testDevices = [kGADSimulatorID]
         bannerView.load(request)
     }
     
@@ -93,27 +89,37 @@ class MenuScene: SKScene {
         bannerView = GADBannerView(adSize: kGADAdSizeSmartBannerPortrait)
         bannerView.adUnitID = "ca-app-pub-3940256099942544/2934735716"
         bannerView.rootViewController = viewController
+        
         view!.addSubview(bannerView)
     }
+
+
     
+    // MARK: - touch functions
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
         let touch = touches.first
         let location = touch?.location(in: buttonLayer)
         let touchedNode = buttonLayer.nodes(at: location!).first
         
-        if touchedNode == playLabel {
-            let scene: SKScene = GameScene(size: self.size, difficulty: difficulty)
+        if touchedNode == playLabel {            
+            let scene = GameScene(size: self.size, difficulty: difficulty)
+            scene.interstitialDelegate = viewController
+            
+            
             let skView = self.view! as SKView
             skView.ignoresSiblingOrder = true
             scene.scaleMode = .aspectFill
             scene.size = skView.bounds.size
             skView.presentScene(scene)
+ 
         }
         
         if touchedNode != nil && difficultyOptions.contains(touchedNode!) {
             setDifficulty(node: touchedNode!)
         }
     }
+    
+    // MARK: - Feature
     
     func setDifficulty(node: SKNode) {
         print("old mode: \(difficulty)")
@@ -127,5 +133,6 @@ class MenuScene: SKScene {
         
     }
     
+
 
 }

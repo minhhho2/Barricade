@@ -18,7 +18,6 @@ struct Constants {
     static let playerSprite: String = "PlayerDown"
     static let CROC_SRITE: String = "Croc"
     static let BLOCK_SPRITE: String = "Block"
-    
 }
 
 struct Message {
@@ -53,28 +52,3 @@ struct Difficulty {
     static let med: TimeInterval = 0.75
     static let hard: TimeInterval = 0.50
 }
-
-
-
-
-/*
- /* Resume game with count down */
- let resumeTimer = SKSpriteNode()
- resumeTimer.zPosition = 4
- resumeTimer.size = CGSize(width: 100, height: 100)
- self.addChild(resumeTimer)
- 
- let arrayCountDownTexture = [
- SKTexture(imageNamed: "NumberThree"),
- SKTexture(imageNamed: "NumberTwo"),
- SKTexture(imageNamed: "NumberOne")]
- 
- let animteCountDown = SKAction.animate(with: arrayCountDownTexture, timePerFrame: 1)
- let removeResumeNode = SKAction.removeFromParent()
- let resumeSequence = SKAction.sequence([animteCountDown, removeResumeNode])
- resumeTimer.run(resumeSequence)
- */
-
-
-
-
