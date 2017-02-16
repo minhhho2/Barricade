@@ -51,3 +51,14 @@ struct Difficulty {
     static let easy: TimeInterval = 1.0
     static let hard: TimeInterval = 0.50
 }
+
+struct LayerZPos {
+    static let gameLayerZ: CGFloat = 10
+    static let tileLayerZ: CGFloat = 20
+    static let objectLayerZ: CGFloat = 30
+    static let touchableLayerZ: CGFloat = 40
+    static let menuLayerZ: CGFloat = 50
+    static let pauseLayerZ: CGFloat = 50
+    static let gameOverLayerZ: CGFloat = 50
+    static let settingLayerZ: CGFloat = 50
+}

@@ -99,7 +99,6 @@ class MenuScene: SKScene {
     
     // MARK: - Feature
     func setDifficulty(node: SKNode) {
-        print("old mode: \(difficulty)")
         switch node {
         case easyLabel:
             difficulty = Difficulty.easy
@@ -111,9 +110,7 @@ class MenuScene: SKScene {
             selectedDifficultyLabel.position = hardLabel.position
             selectedDifficultyLabel.size = CGSize(width: hardLabel.frame.width + 10, height: hardLabel.frame.height + 10)
         default: break
-        }
-        print("new mode: \(difficulty)")
-        
+        }        
     }
     
 

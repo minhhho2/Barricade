@@ -46,7 +46,6 @@ class GameScene: SKScene {
     var leftBtn = SKSpriteNode()
     var rightBtn = SKSpriteNode()
     
-    
     /* Game variables */
     var isGameOver: Bool = false
     var score: Int = 0
@@ -62,35 +61,35 @@ class GameScene: SKScene {
     var moveRate : TimeInterval = 0.5
     var timeSinceMove: TimeInterval = 0.0
 
-
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder) is not used in this app")
     }
     
     init(size: CGSize, difficulty: TimeInterval) {
-        TileWidth = (size.width * 1.0 ) / CGFloat(Game.numCols)
+        TileWidth = size.width / CGFloat(Game.numCols)
         TileHeight = (size.height * 0.75) / CGFloat(Game.numRows)
-        
-        /* Configure and add background */
-        super.init(size: size)
-        self.anchorPoint = CGPoint(x: 0.5, y: 0.5)
-        let background = SKSpriteNode(imageNamed: "GameBG")
-        background.size = size
-        self.addChild(background)
-        
         moveRate = difficulty
         
+        /* Configure */
+        super.init(size: size)
+        self.anchorPoint = CGPoint(x: 0.5, y: 0.5)
+        
         /* Create and configure layers */
-        let cornerBotLeftPoint = CGPoint(x: -TileWidth * CGFloat(Game.numCols) / 2, y: -TileHeight * CGFloat(Game.numRows) / 2)
-        let centrePoint = CGPoint(x: 0, y: 0)
-        configureLayer(parentLayer: self, childLayer: gameLayer, position: centrePoint, zPosition: 1)
-        configureLayer(parentLayer: gameLayer, childLayer: tileLayer, position: cornerBotLeftPoint, zPosition: 2)
-        configureLayer(parentLayer: gameLayer, childLayer: objectLayer, position: cornerBotLeftPoint, zPosition: 3)
-        configureLayer(parentLayer: gameLayer, childLayer: touchableLayer, position: centrePoint, zPosition: 4)
-        configureLayer(parentLayer: gameLayer, childLayer: pauseLayer, position: centrePoint, zPosition: 6)
-        configureLayer(parentLayer: gameLayer, childLayer: gameOverLayer, position: centrePoint, zPosition: 6)
-        configureLayer(parentLayer: gameLayer, childLayer: menuLayer, position: centrePoint, zPosition: 6)
-        configureLayer(parentLayer: gameLayer, childLayer: settingLayer, position: centrePoint, zPosition: 6)
+        let pointBotLeft = CGPoint(x: -self.size.width / 2, y: -self.size.height / 2)
+        let pointCenter = CGPoint(x: 0, y: 0)
+        let xLeft = -self.size.width / 2
+        let xRight = self.size.width / 2
+        let yBot = -self.size.height / 2
+        
+        configureLayer(parentLayer: self, childLayer: gameLayer, position: pointCenter, zPosition: LayerZPos.gameLayerZ)
+        configureLayer(parentLayer: gameLayer, childLayer: tileLayer, position: pointBotLeft, zPosition: LayerZPos.tileLayerZ)
+        configureLayer(parentLayer: gameLayer, childLayer: objectLayer, position: pointBotLeft, zPosition: LayerZPos.objectLayerZ)
+        configureLayer(parentLayer: gameLayer, childLayer: touchableLayer, position: pointCenter, zPosition: LayerZPos.touchableLayerZ)
+        
+        configureLayer(parentLayer: gameLayer, childLayer: pauseLayer, position: pointCenter, zPosition: LayerZPos.pauseLayerZ)
+        configureLayer(parentLayer: gameLayer, childLayer: gameOverLayer, position: pointCenter, zPosition: LayerZPos.gameOverLayerZ)
+        configureLayer(parentLayer: gameLayer, childLayer: menuLayer, position: pointCenter, zPosition: LayerZPos.menuLayerZ)
+        configureLayer(parentLayer: gameLayer, childLayer: settingLayer, position: pointCenter, zPosition: LayerZPos.settingLayerZ)
         
         pauseLayer.isHidden = true
         gameOverLayer.isHidden = true
@@ -98,16 +97,13 @@ class GameScene: SKScene {
         settingLayer.isHidden = true
     
         /* Create and configure score labels */
-        let leftEdge = -self.size.width / 2
-        let rightEdge = self.size.width / 2
-        let botEdge = -self.size.height / 2
+        let baseLine: CGFloat = TileHeight * CGFloat(Game.numRows) - self.size.height / 2 + TileHeight
         
-        let scorePos = CGPoint(x: leftEdge, y: botEdge)
-        configureLabelNode(node: scoreLabel, text: "SCORE: ", position: scorePos, layer: gameLayer, horzAlign: .left)
+        let scorePos = CGPoint(x: xLeft, y: baseLine)
+        configureLabelNode(node: scoreLabel, text: "SCORE: ", position: scorePos, layer: touchableLayer, horzAlign: .left)
         
-        let highScorePos = CGPoint(x: leftEdge, y: botEdge + scoreLabel.frame.height * 2)
-        configureLabelNode(node: highScoreLabel, text: "HIGH SCORE: ", position: highScorePos, layer: gameLayer, horzAlign: .left)
-        
+        let highScorePos = CGPoint(x: xLeft, y: baseLine + scoreLabel.frame.height * 2)
+        configureLabelNode(node: highScoreLabel, text: "HIGH SCORE: ", position: highScorePos, layer: touchableLayer, horzAlign: .left)
         
         let readyLblPos = CGPoint(x: 0, y: 0)
         configureLabelNode(node:readyLabel!, text: "Press To Play", position: readyLblPos, layer: touchableLayer, horzAlign: .center)
@@ -115,26 +111,26 @@ class GameScene: SKScene {
         /* Create and configure buttons and labels */
         let btnSize = CGSize(width: TileWidth * 2, height: TileHeight * 2)
         
-        let settingLblPos = CGPoint(x: rightEdge, y: botEdge)
+        let settingLblPos = CGPoint(x: xRight, y: baseLine)
         configureLabelNode(node: settingLabel, text: "SETTING", position: settingLblPos, layer: touchableLayer, horzAlign: .right)
         
-        let pauseLblPos = CGPoint(x: rightEdge, y: botEdge + settingLabel.frame.height)
+        let pauseLblPos = CGPoint(x: xRight, y: baseLine + settingLabel.frame.height)
         configureLabelNode(node: pauseLabel, text: "PAUSE", position: pauseLblPos, layer: touchableLayer, horzAlign: .right)
         
-        let menuLblPos = CGPoint(x: rightEdge, y: botEdge + settingLabel.frame.height + pauseLabel.frame.height)
+        let menuLblPos = CGPoint(x: xRight, y: baseLine + settingLabel.frame.height + pauseLabel.frame.height)
         configureLabelNode(node: menuLabel, text: "MENU", position: menuLblPos, layer: touchableLayer, horzAlign: .right)
         
-        let upBtnPos = CGPoint(x: rightEdge - 2.5 * btnSize.width / 2, y: botEdge + 3.5 * btnSize.height)
-        configureSKSpriteNode(node: upBtn, imageName: "UpArrow", position: upBtnPos, zPosition: 4, size: btnSize, alpha: 0.2)
+        let upBtnPos = CGPoint(x: xRight - 2.5 * btnSize.width / 2, y: yBot + 3.5 * btnSize.height)
+        configureSKSpriteNode(node: upBtn, imageName: "UpArrow", position: upBtnPos, size: btnSize, alpha: 0.2)
 
-        let downBtnPos = CGPoint(x: rightEdge - 2.5 * btnSize.width / 2, y: botEdge + 1.5 * btnSize.height)
-        configureSKSpriteNode(node: downBtn, imageName: "DownArrow", position: downBtnPos, zPosition: 4, size: btnSize, alpha: 0.2)
+        let downBtnPos = CGPoint(x: xRight - 2.5 * btnSize.width / 2, y: yBot + 1.5 * btnSize.height)
+        configureSKSpriteNode(node: downBtn, imageName: "DownArrow", position: downBtnPos, size: btnSize, alpha: 0.2)
 
-        let leftBtnPos = CGPoint(x: rightEdge - 4 * btnSize.width / 2, y: botEdge + 2.5 * btnSize.height)
-        configureSKSpriteNode(node: leftBtn, imageName: "LeftArrow", position: leftBtnPos, zPosition: 4, size: btnSize, alpha: 0.2)
+        let leftBtnPos = CGPoint(x: xRight - 4 * btnSize.width / 2, y: yBot + 2.5 * btnSize.height)
+        configureSKSpriteNode(node: leftBtn, imageName: "LeftArrow", position: leftBtnPos, size: btnSize, alpha: 0.2)
 
-        let rightBtnPos = CGPoint(x: rightEdge - btnSize.width / 2, y: botEdge + 2.5 * btnSize.height)
-        configureSKSpriteNode(node: rightBtn, imageName: "RightArrow", position: rightBtnPos, zPosition: 4, size: btnSize, alpha: 0.2)
+        let rightBtnPos = CGPoint(x: xRight - btnSize.width / 2, y: yBot + 2.5 * btnSize.height)
+        configureSKSpriteNode(node: rightBtn, imageName: "RightArrow", position: rightBtnPos, size: btnSize, alpha: 0.2)
         
         arrowButtons = [upBtn, downBtn, leftBtn, rightBtn]
         
@@ -172,16 +168,16 @@ class GameScene: SKScene {
         node.fontName = "GillSans-Bold"
         node.fontSize = size.width / 15
         node.position = position
-        node.zPosition = 20
+        node.zPosition = layer.zPosition + 1
         node.horizontalAlignmentMode = horzAlign
         node.verticalAlignmentMode = .bottom
         layer.addChild(node)
     }
     
-    func configureSKSpriteNode(node: SKSpriteNode, imageName: String, position: CGPoint, zPosition: CGFloat, size: CGSize, alpha: CGFloat) {
+    func configureSKSpriteNode(node: SKSpriteNode, imageName: String, position: CGPoint, size: CGSize, alpha: CGFloat) {
         node.texture = SKTexture(imageNamed: imageName)
         node.position = position
-        node.zPosition = zPosition
+        node.zPosition = LayerZPos.touchableLayerZ
         node.size = size
         node.alpha = alpha
         touchableLayer.addChild(node)
@@ -407,7 +403,7 @@ class GameScene: SKScene {
     func handleTouchOnPauseLabel() {
         let centre = CGPoint(x: 0, y: 0)
         let pauseBG = SKSpriteNode(imageNamed: "MenuBG")
-        pauseBG.zPosition = 6
+        pauseBG.zPosition = LayerZPos.pauseLayerZ
         pauseBG.size = self.size
         pauseBG.position = centre
         pauseLayer.addChild(pauseBG)
