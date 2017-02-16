@@ -12,7 +12,6 @@ import GoogleMobileAds
 
 protocol InterstitialDelegate {
     func showInterstitialAd()
-    func printLine()
 }
 
 class GameScene: SKScene {
@@ -451,7 +450,7 @@ class GameScene: SKScene {
         }
         
         if touchedNode == restartLevelLabel {
-            self.interstitialDelegate?.showInterstitialAd()            
+            self.interstitialDelegate?.showInterstitialAd()
             startNewGame(stage: level.getStage())
             levelMessage(message: "Restart Level! Tap To Continue!")
         }

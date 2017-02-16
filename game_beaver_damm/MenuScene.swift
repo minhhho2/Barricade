@@ -20,8 +20,8 @@ class MenuScene: SKScene {
     
     /* Mode UI Label */
     var easyLabel = SKLabelNode()
-    var medLabel = SKLabelNode()
     var hardLabel = SKLabelNode()
+    var selectedDifficultyLabel = SKSpriteNode()
     
     /* Layer */
     var buttonLayer = SKNode()
@@ -40,22 +40,29 @@ class MenuScene: SKScene {
         self.anchorPoint = CGPoint(x: 0.5, y: 0.5)
         self.addChild(buttonLayer)
         
-        difficultyOptions = [easyLabel, medLabel, hardLabel]
+        difficultyOptions = [easyLabel, hardLabel]
         
-        let centre = CGPoint(x: 0, y: 0)
-        configureLabelNode(node: playLabel, text: "PLAY", position: centre, layer: buttonLayer)
-        let settingLblPos = CGPoint(x: 0, y: playLabel.position.y - playLabel.frame.height * 2)
-        configureLabelNode(node: settingLabel, text: "SETTING", position: settingLblPos, layer: buttonLayer)
-
-        let easyLblPos = CGPoint(x: 0, y: settingLabel.position.y - settingLabel.frame.height * 2)
+        let easyLblPos = CGPoint(x: -self.frame.width / 4, y: 0)
         configureLabelNode(node: easyLabel, text: "EASY", position: easyLblPos, layer: buttonLayer)
         
-        let medLblPos = CGPoint(x: 0, y: easyLabel.position.y - easyLabel.frame.height * 2)
-        configureLabelNode(node: medLabel, text: "MEDIUM", position: medLblPos, layer: buttonLayer)
-        
-        let hardLblPos = CGPoint(x: 0, y: medLabel.position.y - medLabel.frame.height * 2)
+        let hardLblPos = CGPoint(x: self.frame.width / 4, y: 0)
         configureLabelNode(node: hardLabel, text: "HARD", position: hardLblPos, layer: buttonLayer)
         
+        let playLblPos = CGPoint(x: 0, y: easyLabel.position.y + easyLabel.frame.height * 3)
+        configureLabelNode(node: playLabel, text: "PLAY", position: playLblPos, layer: buttonLayer)
+        
+        let settingLblPos = CGPoint(x: 0, y: easyLabel.position.y - easyLabel.frame.height * 3)
+        configureLabelNode(node: settingLabel, text: "SETTING", position: settingLblPos, layer: buttonLayer)
+        
+        setDifficultyUI()
+        
+    }
+    
+    func setDifficultyUI() {
+        let difficultySelectorSize = CGSize(width: easyLabel.frame.width + 5, height: easyLabel.frame.height + 5)
+        selectedDifficultyLabel = SKSpriteNode(color: UIColor.black, size: difficultySelectorSize)
+        selectedDifficultyLabel.position = easyLabel.position
+        self.addChild(selectedDifficultyLabel)
     }
     
     func configureLabelNode(node: SKLabelNode, text: String, position: CGPoint, layer: SKNode) {
@@ -63,37 +70,10 @@ class MenuScene: SKScene {
         node.fontSize = size.width / 10
         node.fontName = "AvenirNext-Bold"
         node.position = position
+        node.verticalAlignmentMode = .center
         node.zPosition = 10
         layer.addChild(node)
     }
-    
-    
-    override func didMove(to view: SKView) {
-        /*
-        if bannerView == nil {
-            initializeBanner()
-        }
-        loadRequest()
-        */
- }
-    
-    // MARK: - AdMob Functions
-    func loadRequest() {
-        let request = GADRequest()
-        request.testDevices = [kGADSimulatorID]
-        bannerView.load(request)
-    }
-    
-    func initializeBanner() {
-        // Create a banner ad and add it to the view hierarchy.
-        bannerView = GADBannerView(adSize: kGADAdSizeSmartBannerPortrait)
-        bannerView.adUnitID = "ca-app-pub-3940256099942544/2934735716"
-        bannerView.rootViewController = viewController
-        
-        view!.addSubview(bannerView)
-    }
-
-
     
     // MARK: - touch functions
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -104,8 +84,6 @@ class MenuScene: SKScene {
         if touchedNode == playLabel {            
             let scene = GameScene(size: self.size, difficulty: difficulty)
             scene.interstitialDelegate = viewController
-            
-            
             let skView = self.view! as SKView
             skView.ignoresSiblingOrder = true
             scene.scaleMode = .aspectFill
@@ -120,13 +98,18 @@ class MenuScene: SKScene {
     }
     
     // MARK: - Feature
-    
     func setDifficulty(node: SKNode) {
         print("old mode: \(difficulty)")
         switch node {
-        case easyLabel: difficulty = Difficulty.easy
-        case medLabel: difficulty = Difficulty.med
-        case hardLabel: difficulty = Difficulty.hard
+        case easyLabel:
+            difficulty = Difficulty.easy
+            selectedDifficultyLabel.position = easyLabel.position
+            selectedDifficultyLabel.size = CGSize(width: easyLabel.frame.width + 10, height: easyLabel.frame.height + 10)
+        
+        case hardLabel:
+            difficulty = Difficulty.hard
+            selectedDifficultyLabel.position = hardLabel.position
+            selectedDifficultyLabel.size = CGSize(width: hardLabel.frame.width + 10, height: hardLabel.frame.height + 10)
         default: break
         }
         print("new mode: \(difficulty)")

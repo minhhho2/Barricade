@@ -26,11 +26,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "game_beaver_damm/Level.swift"
-            timestampString = "508610872.13897"
+            timestampString = "508947716.200612"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "112"
-            endingLineNumber = "112"
+            startingLineNumber = "134"
+            endingLineNumber = "134"
             landmarkName = "Level"
             landmarkType = "3">
          </BreakpointContent>

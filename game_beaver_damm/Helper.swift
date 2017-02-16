@@ -49,6 +49,5 @@ struct BoardPosition {
 
 struct Difficulty {
     static let easy: TimeInterval = 1.0
-    static let med: TimeInterval = 0.75
     static let hard: TimeInterval = 0.50
 }
