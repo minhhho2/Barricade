@@ -22,6 +22,7 @@
 		066070811E2703480013BDEA /* Array2D.swift in Sources */ = {isa = PBXBuildFile; fileRef = 066070801E2703480013BDEA /* Array2D.swift */; };
 		066070831E2709000013BDEA /* Level.swift in Sources */ = {isa = PBXBuildFile; fileRef = 066070821E2709000013BDEA /* Level.swift */; };
 		066070851E27563E0013BDEA /* Tile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 066070841E27563E0013BDEA /* Tile.swift */; };
+		069D01991E57509100B377D6 /* Instruction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 069D01981E57509100B377D6 /* Instruction.swift */; };
 		06A673821E2E5237000BE886 /* MenuScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06A673811E2E5237000BE886 /* MenuScene.swift */; };
 		63246AC61E890645F6A96008 /* libPods-game_beaver_damm.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F74B0A509F5BE209438D11D2 /* libPods-game_beaver_damm.a */; };
 /* End PBXBuildFile section */
@@ -44,6 +45,7 @@
 		066070801E2703480013BDEA /* Array2D.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Array2D.swift; sourceTree = "<group>"; };
 		066070821E2709000013BDEA /* Level.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Level.swift; sourceTree = "<group>"; };
 		066070841E27563E0013BDEA /* Tile.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Tile.swift; sourceTree = "<group>"; };
+		069D01981E57509100B377D6 /* Instruction.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Instruction.swift; sourceTree = "<group>"; };
 		06A673811E2E5237000BE886 /* MenuScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MenuScene.swift; sourceTree = "<group>"; };
 		BB3E047510C0007390D6C6AE /* Pods-game_beaver_damm.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-game_beaver_damm.release.xcconfig"; path = "Pods/Target Support Files/Pods-game_beaver_damm/Pods-game_beaver_damm.release.xcconfig"; sourceTree = "<group>"; };
 		DDB65FDD0424438498AB0A63 /* Pods-game_beaver_damm.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-game_beaver_damm.debug.xcconfig"; path = "Pods/Target Support Files/Pods-game_beaver_damm/Pods-game_beaver_damm.debug.xcconfig"; sourceTree = "<group>"; };
@@ -107,6 +109,7 @@
 				066070821E2709000013BDEA /* Level.swift */,
 				066070841E27563E0013BDEA /* Tile.swift */,
 				0660707E1E2682480013BDEA /* Helper.swift */,
+				069D01981E57509100B377D6 /* Instruction.swift */,
 			);
 			name = Entity;
 			sourceTree = "<group>";
@@ -271,6 +274,7 @@
 				0660707D1E2677180013BDEA /* Object.swift in Sources */,
 				0660707F1E2682480013BDEA /* Helper.swift in Sources */,
 				066070601E2668E00013BDEA /* GameViewController.swift in Sources */,
+				069D01991E57509100B377D6 /* Instruction.swift in Sources */,
 				066070791E2672900013BDEA /* Enemy.swift in Sources */,
 				066070581E2668E00013BDEA /* AppDelegate.swift in Sources */,
 				066070811E2703480013BDEA /* Array2D.swift in Sources */,
