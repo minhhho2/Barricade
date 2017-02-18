@@ -134,7 +134,7 @@ class GameScene: SKScene {
         
         arrowButtons = [upBtn, downBtn, leftBtn, rightBtn]
         
-        startNewGame(stage: Game.initialStage)
+        startNewGame(stage: Game.initialStage, score: 0)
  
     }
     
@@ -186,7 +186,7 @@ class GameScene: SKScene {
     
     
     // MARK: - New Game Flow
-    func startNewGame(stage: Int) {
+    func startNewGame(stage: Int, score: Int) {
         objectLayer.removeAllChildren()
         tileLayer.removeAllChildren()
         pauseLayer.removeAllChildren()
@@ -195,6 +195,7 @@ class GameScene: SKScene {
         settingLayer.removeAllChildren()
         Player.sharedIntance.resetColRow()
         
+        self.score = score
         level = Level(stage: stage)
         addTiles()
         beginGame()
@@ -441,13 +442,13 @@ class GameScene: SKScene {
         }
 
         if touchedNode == newGameLabel {
-            startNewGame(stage: Game.initialStage)
+            startNewGame(stage: Game.initialStage, score: 0)
             levelMessage(message: Message.newGame)
         }
         
         if touchedNode == restartLevelLabel {
             self.interstitialDelegate?.showInterstitialAd()
-            startNewGame(stage: level.getStage())
+            startNewGame(stage: level.getStage(), score: self.score)
             levelMessage(message: "Restart Level! Tap To Continue!")
         }
     }
@@ -516,6 +517,7 @@ class GameScene: SKScene {
                 updateEnemyStates()
             }
         }
+        updateScore()
         updateHighScore()
         checkNextLevel()
         checkGameOver()
@@ -525,7 +527,7 @@ class GameScene: SKScene {
     func checkNextLevel() {
         if level.enemies.count == 0 {
             level.nextStage()
-            startNewGame(stage: level.getStage())
+            startNewGame(stage: level.getStage(), score: self.score)
             levelMessage(message: "Next Level! Tap To Continue!")
         }
     }
@@ -534,6 +536,9 @@ class GameScene: SKScene {
         if isGameOver && gameOverLayer.isHidden {
             handleGameOver()
         }
+    }
+    func updateScore() {
+        scoreLabel.text = "SCORE: \(score)"
     }
     
     func updateHighScore() {
