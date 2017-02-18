@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		060DADB71E5829470082D56E /* TouchableLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 060DADB61E5829470082D56E /* TouchableLabel.swift */; };
 		066070581E2668E00013BDEA /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 066070571E2668E00013BDEA /* AppDelegate.swift */; };
 		0660705E1E2668E00013BDEA /* GameScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0660705D1E2668E00013BDEA /* GameScene.swift */; };
 		066070601E2668E00013BDEA /* GameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0660705F1E2668E00013BDEA /* GameViewController.swift */; };
@@ -28,6 +29,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		060DADB61E5829470082D56E /* TouchableLabel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TouchableLabel.swift; sourceTree = "<group>"; };
 		066070541E2668E00013BDEA /* game_beaver_damm.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = game_beaver_damm.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		066070571E2668E00013BDEA /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		0660705D1E2668E00013BDEA /* GameScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameScene.swift; sourceTree = "<group>"; };
@@ -101,6 +103,7 @@
 			isa = PBXGroup;
 			children = (
 				0660707C1E2677180013BDEA /* Object.swift */,
+				060DADB61E5829470082D56E /* TouchableLabel.swift */,
 				0660707A1E2672B10013BDEA /* Monster.swift */,
 				066070701E2670D60013BDEA /* Player.swift */,
 				066070781E2672900013BDEA /* Enemy.swift */,
@@ -271,6 +274,7 @@
 				0660705E1E2668E00013BDEA /* GameScene.swift in Sources */,
 				066070751E26710B0013BDEA /* Block.swift in Sources */,
 				06A673821E2E5237000BE886 /* MenuScene.swift in Sources */,
+				060DADB71E5829470082D56E /* TouchableLabel.swift in Sources */,
 				0660707D1E2677180013BDEA /* Object.swift in Sources */,
 				0660707F1E2682480013BDEA /* Helper.swift in Sources */,
 				066070601E2668E00013BDEA /* GameViewController.swift in Sources */,

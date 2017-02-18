@@ -15,13 +15,13 @@ class MenuScene: SKScene {
     var bannerView: GADBannerView!
     
     /* UI Label */
-    var playLabel = SKLabelNode()
-    var settingLabel = SKLabelNode()
-    var instructLabel = SKLabelNode()
+    //var playLabel = SKLabelNode()
+    //var settingLabel = SKLabelNode()
+    //var instructLabel = SKLabelNode()
     
     /* Mode UI Label */
-    var easyLabel = SKLabelNode()
-    var hardLabel = SKLabelNode()
+    //var easyLabel = SKLabelNode()
+    //var hardLabel = SKLabelNode()
     var selectedDifficultyLabel = SKSpriteNode()
     
     /* Layer */
@@ -46,22 +46,24 @@ class MenuScene: SKScene {
         self.addChild(buttonLayer)
         self.addChild(instructionLayer)
         
-        difficultyOptions = [easyLabel, hardLabel]
         
         let easyLblPos = CGPoint(x: -self.frame.width / 4, y: 0)
-        configureLabelNode(node: easyLabel, text: "EASY", position: easyLblPos, layer: buttonLayer)
+        let easyLabel = TouchableLabel(text: "EASY", name: "Easy", pos: easyLblPos, layer: buttonLayer, fontName: "AvenirNext-Bold", fontSize: size.width / 10, vertAlign: .center, horzAlign: .center)
         
         let hardLblPos = CGPoint(x: self.frame.width / 4, y: 0)
-        configureLabelNode(node: hardLabel, text: "HARD", position: hardLblPos, layer: buttonLayer)
+        let hardLabel = TouchableLabel(text: "HARD", name: "Hard", pos: hardLblPos, layer: buttonLayer, fontName: "AvenirNext-Bold", fontSize: size.width / 10, vertAlign: .center, horzAlign: .center)
         
-        let playLblPos = CGPoint(x: 0, y: easyLabel.position.y + easyLabel.frame.height * 3)
-        configureLabelNode(node: playLabel, text: "PLAY", position: playLblPos, layer: buttonLayer)
+        difficultyOptions = [easyLabel.node, hardLabel.node]
+
         
-        let settingLblPos = CGPoint(x: 0, y: easyLabel.position.y - easyLabel.frame.height * 3)
-        configureLabelNode(node: settingLabel, text: "SETTING", position: settingLblPos, layer: buttonLayer)
+        let playLblPos = CGPoint(x: 0, y: easyLabel.node.position.y + easyLabel.node.frame.height * 3)
+        _ = TouchableLabel(text: "PLAY", name: "Play", pos: playLblPos, layer: buttonLayer, fontName: "AvenirNext-Bold", fontSize: size.width / 10, vertAlign: .center, horzAlign: .center)
         
-        let instructLblPos = CGPoint(x: 0, y: settingLabel.position.y - settingLabel.frame.height * 3)
-        configureLabelNode(node: instructLabel, text: "INSTRUCTIONS", position: instructLblPos, layer: buttonLayer)
+        let settingLblPos = CGPoint(x: 0, y: easyLabel.node.position.y - easyLabel.node.frame.height * 3)
+        let settingLabel = TouchableLabel(text: "SETTING", name: "Setting", pos: settingLblPos, layer: buttonLayer, fontName: "AvenirNext-Bold", fontSize: size.width / 10, vertAlign: .center, horzAlign: .center)
+
+        let instructLblPos = CGPoint(x: 0, y: settingLabel.node.position.y - settingLabel.node.frame.height * 3)
+        _ = TouchableLabel(text: "INSTRUCTION", name: "Instruction", pos: instructLblPos, layer: buttonLayer, fontName: "AvenirNext-Bold", fontSize: size.width / 10, vertAlign: .center, horzAlign: .center)
         
         instructionLayer.isHidden = true
         
@@ -69,20 +71,11 @@ class MenuScene: SKScene {
     }
     
     func setDifficultyUI() {
+        let easyLabel = buttonLayer.childNode(withName: "Easy")!
         let difficultySelectorSize = CGSize(width: easyLabel.frame.width + 5, height: easyLabel.frame.height + 5)
         selectedDifficultyLabel = SKSpriteNode(color: UIColor.black, size: difficultySelectorSize)
         selectedDifficultyLabel.position = easyLabel.position
         self.addChild(selectedDifficultyLabel)
-    }
-    
-    func configureLabelNode(node: SKLabelNode, text: String, position: CGPoint, layer: SKNode) {
-        node.text = text
-        node.fontSize = size.width / 10
-        node.fontName = "AvenirNext-Bold"
-        node.position = position
-        node.verticalAlignmentMode = .center
-        node.zPosition = buttonLayer.zPosition + 1
-        layer.addChild(node)
     }
     
     // MARK: - touch functions
@@ -96,7 +89,7 @@ class MenuScene: SKScene {
             return
         }
         
-        if touchedNode == playLabel {            
+        if touchedNode == buttonLayer.childNode(withName: "Play") {
             let scene = GameScene(size: self.size, difficulty: difficulty)
             scene.interstitialDelegate = viewController
             let skView = self.view! as SKView
@@ -111,13 +104,10 @@ class MenuScene: SKScene {
             setDifficulty(node: touchedNode!)
             return
         }
-        
-        if touchedNode == instructLabel {
+        if touchedNode == buttonLayer.childNode(withName: "Instruction") {
             handleTouchOnInstruct()
             return
         }
-        
-        
     }
     
     // MARK: - Touch
@@ -169,6 +159,9 @@ class MenuScene: SKScene {
     
     // MARK: - Feature
     func setDifficulty(node: SKNode) {
+        let easyLabel = buttonLayer.childNode(withName: "Easy")!
+        let hardLabel = buttonLayer.childNode(withName: "Hard")!
+
         switch node {
         case easyLabel:
             difficulty = Difficulty.easy
