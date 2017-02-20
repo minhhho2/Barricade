@@ -19,7 +19,7 @@ class GameScene: SKScene {
     
     var interstitialDelegate: InterstitialDelegate?
     
-    // MARK: - Game Layers
+    // MARK: - Subviews
     let gameLayer = SKNode()
     let tileLayer = SKNode()
     let objectLayer = SKNode()
@@ -30,17 +30,13 @@ class GameScene: SKScene {
     let gameOverLayer = SKNode()
     let settingLayer = SKNode()
 
-    // MARK: - UI Buttons
-    var upBtn = SKSpriteNode()
-    var downBtn = SKSpriteNode()
-    var leftBtn = SKSpriteNode()
-    var rightBtn = SKSpriteNode()
+    // MARK: - UI
+    var arrowPad: ArrowPad?
     
     /* Game variables */
     var isGameOver: Bool = false
     var score: Int = 0
     var highScore: Int = 0
-    var arrowButtons: Array<SKNode> = []
     var level: Level!
 
     let TileWidth: CGFloat
@@ -100,7 +96,6 @@ class GameScene: SKScene {
         let highScorePos = CGPoint(x: xLeft, y: baseLine + labelHeight * 1.75)
         _ = TouchableLabel(text: "HIGH SCORE: ", name: "High Score", pos: highScorePos, layer: touchableLayer, fontName: "AvenirNext-Bold", fontSize: size.width / 15, vertAlign: .bottom, horzAlign: .left)
         
-        
         let settingPos = CGPoint(x: xRight, y: baseLine)
         _ = TouchableLabel(text: "SETTING", name: "Setting", pos: settingPos, layer: touchableLayer, fontName: "AvenirNext-Bold", fontSize: size.width / 15, vertAlign: .bottom, horzAlign: .right)
 
@@ -111,26 +106,13 @@ class GameScene: SKScene {
         let menuPos = CGPoint(x: xRight, y: baseLine + labelHeight * 3.5)
         _ = TouchableLabel(text: "MENU", name: "Menu", pos: menuPos, layer: touchableLayer, fontName: "AvenirNext-Bold", fontSize: size.width / 15, vertAlign: .bottom, horzAlign: .right)
         
-        let upBtnPos = CGPoint(x: xRight - 1.75 * btnSize.width, y: yBot + 2.5 * btnSize.height)
-        configureSKSpriteNode(node: upBtn, imageName: "UpArrow", position: upBtnPos, size: btnSize, alpha: 0.2)
-
-        let downBtnPos = CGPoint(x: xRight - 1.75 * btnSize.width, y: yBot + 0.5 * btnSize.height)
-        configureSKSpriteNode(node: downBtn, imageName: "DownArrow", position: downBtnPos, size: btnSize, alpha: 0.2)
-
-        let leftBtnPos = CGPoint(x: xRight - 3 * btnSize.width, y: yBot + 1.5 * btnSize.height)
-        configureSKSpriteNode(node: leftBtn, imageName: "LeftArrow", position: leftBtnPos, size: btnSize, alpha: 0.2)
-
-        let rightBtnPos = CGPoint(x: xRight - btnSize.width / 2, y: yBot + 1.5 * btnSize.height)
-        configureSKSpriteNode(node: rightBtn, imageName: "RightArrow", position: rightBtnPos, size: btnSize, alpha: 0.2)
-        
-        arrowButtons = [upBtn, downBtn, leftBtn, rightBtn]
+        arrowPad = ArrowPad(arrSize: btnSize, xRight: xRight, yBot: yBot, layer: touchableLayer)
         
         startNewGame(stage: Game.initialStage, score: 0)
  
     }
     
     // MARK: - General
-    
     func levelMessage(message: String) {
         let readyPos = CGPoint(x: 0, y: 0)
 
@@ -235,6 +217,8 @@ class GameScene: SKScene {
         let highScoreLabel = touchableLayer.childNode(withName: "High Score")! as! SKLabelNode
         scoreLabel.text = "SCORE: \(score)"
         highScoreLabel.text = "HIGH SCORE: \(highScore)"
+        
+        Music.loadBackgroundMusic(scene: self)
 
     }
 
@@ -319,7 +303,7 @@ class GameScene: SKScene {
         }
 
         /* Touch on arrow */
-        if !(isGamePaused)! && !isGameOver && touchedNode != nil && arrowButtons.contains(touchedNode!){
+        if !(isGamePaused)! && !isGameOver && touchedNode != nil && arrowPad!.containsNode(node: touchedNode) {
             let newPlayerDirection = getDirectionOfTouch(node: touchedNode!)
             let newImage = "Player\(newPlayerDirection.rawValue)"
             Player.sharedIntance.getSprite().texture = SKTexture(imageNamed: newImage)
@@ -652,10 +636,10 @@ class GameScene: SKScene {
     // MARK: - Function helpers
     func getDirectionOfTouch(node: SKNode) -> Direction {
         switch node {
-        case upBtn: return Direction.up
-        case downBtn: return Direction.down
-        case leftBtn: return Direction.left
-        case rightBtn: return Direction.right
+        case touchableLayer.childNode(withName: "Up")!: return Direction.up
+        case touchableLayer.childNode(withName: "Down")!: return Direction.down
+        case touchableLayer.childNode(withName: "Left")!: return Direction.left
+        case touchableLayer.childNode(withName: "Right")!: return Direction.right
         default: return Direction.none
         }
     }

@@ -25,8 +25,11 @@
 		066070811E2703480013BDEA /* Array2D.swift in Sources */ = {isa = PBXBuildFile; fileRef = 066070801E2703480013BDEA /* Array2D.swift */; };
 		066070831E2709000013BDEA /* Level.swift in Sources */ = {isa = PBXBuildFile; fileRef = 066070821E2709000013BDEA /* Level.swift */; };
 		066070851E27563E0013BDEA /* Tile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 066070841E27563E0013BDEA /* Tile.swift */; };
+		066FEA3B1E5B3F4200D8AA53 /* Music.swift in Sources */ = {isa = PBXBuildFile; fileRef = 066FEA3A1E5B3F4200D8AA53 /* Music.swift */; };
 		069D01991E57509100B377D6 /* Instruction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 069D01981E57509100B377D6 /* Instruction.swift */; };
 		06A673821E2E5237000BE886 /* MenuScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06A673811E2E5237000BE886 /* MenuScene.swift */; };
+		06D67B4D1E5ABC210091C6E4 /* ArrowPad.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06D67B4C1E5ABC210091C6E4 /* ArrowPad.swift */; };
+		06D67B521E5AC0CE0091C6E4 /* music.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 06D67B511E5AC0CE0091C6E4 /* music.m4a */; };
 		63246AC61E890645F6A96008 /* libPods-game_beaver_damm.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F74B0A509F5BE209438D11D2 /* libPods-game_beaver_damm.a */; };
 /* End PBXBuildFile section */
 
@@ -51,8 +54,11 @@
 		066070801E2703480013BDEA /* Array2D.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Array2D.swift; sourceTree = "<group>"; };
 		066070821E2709000013BDEA /* Level.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Level.swift; sourceTree = "<group>"; };
 		066070841E27563E0013BDEA /* Tile.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Tile.swift; sourceTree = "<group>"; };
+		066FEA3A1E5B3F4200D8AA53 /* Music.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Music.swift; sourceTree = "<group>"; };
 		069D01981E57509100B377D6 /* Instruction.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Instruction.swift; sourceTree = "<group>"; };
 		06A673811E2E5237000BE886 /* MenuScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MenuScene.swift; sourceTree = "<group>"; };
+		06D67B4C1E5ABC210091C6E4 /* ArrowPad.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ArrowPad.swift; sourceTree = "<group>"; };
+		06D67B511E5AC0CE0091C6E4 /* music.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = music.m4a; sourceTree = "<group>"; };
 		BB3E047510C0007390D6C6AE /* Pods-game_beaver_damm.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-game_beaver_damm.release.xcconfig"; path = "Pods/Target Support Files/Pods-game_beaver_damm/Pods-game_beaver_damm.release.xcconfig"; sourceTree = "<group>"; };
 		DDB65FDD0424438498AB0A63 /* Pods-game_beaver_damm.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-game_beaver_damm.debug.xcconfig"; path = "Pods/Target Support Files/Pods-game_beaver_damm/Pods-game_beaver_damm.debug.xcconfig"; sourceTree = "<group>"; };
 		F74B0A509F5BE209438D11D2 /* libPods-game_beaver_damm.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-game_beaver_damm.a"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -90,6 +96,7 @@
 			isa = PBXGroup;
 			children = (
 				0660707C1E2677180013BDEA /* Object.swift */,
+				0660707A1E2672B10013BDEA /* Monster.swift */,
 				066070701E2670D60013BDEA /* Player.swift */,
 				066070781E2672900013BDEA /* Enemy.swift */,
 				066070741E26710B0013BDEA /* Block.swift */,
@@ -102,6 +109,7 @@
 			children = (
 				060DADB61E5829470082D56E /* TouchableLabel.swift */,
 				061742B91E5A89DB0066D83B /* TouchableNode.swift */,
+				06D67B4C1E5ABC210091C6E4 /* ArrowPad.swift */,
 			);
 			name = "UI Object";
 			sourceTree = "<group>";
@@ -127,11 +135,13 @@
 		066070561E2668E00013BDEA /* game_beaver_damm */ = {
 			isa = PBXGroup;
 			children = (
-				06A6737E1E2E51FC000BE886 /* View */,
 				0660706F1E2670A70013BDEA /* Model */,
+				06A6737E1E2E51FC000BE886 /* View */,
 				061742BF1E5A98290066D83B /* Controller */,
-				066070571E2668E00013BDEA /* AppDelegate.swift */,
+				066FEA391E5B3EE500D8AA53 /* Helper */,
+				06D67B501E5AC0A50091C6E4 /* Music */,
 				066070611E2668E00013BDEA /* Main.storyboard */,
+				066070571E2668E00013BDEA /* AppDelegate.swift */,
 				066070641E2668E00013BDEA /* Assets.xcassets */,
 				066070661E2668E00013BDEA /* LaunchScreen.storyboard */,
 				066070691E2668E00013BDEA /* Info.plist */,
@@ -144,15 +154,22 @@
 			children = (
 				061742C11E5A984D0066D83B /* UI Object */,
 				061742C01E5A98370066D83B /* Entity */,
-				0660707A1E2672B10013BDEA /* Monster.swift */,
 				061742BB1E5A972A0066D83B /* Layer */,
 				066070801E2703480013BDEA /* Array2D.swift */,
 				066070821E2709000013BDEA /* Level.swift */,
 				066070841E27563E0013BDEA /* Tile.swift */,
-				0660707E1E2682480013BDEA /* Helper.swift */,
 				069D01981E57509100B377D6 /* Instruction.swift */,
 			);
 			name = Model;
+			sourceTree = "<group>";
+		};
+		066FEA391E5B3EE500D8AA53 /* Helper */ = {
+			isa = PBXGroup;
+			children = (
+				066FEA3A1E5B3F4200D8AA53 /* Music.swift */,
+				0660707E1E2682480013BDEA /* Helper.swift */,
+			);
+			name = Helper;
 			sourceTree = "<group>";
 		};
 		06A6737E1E2E51FC000BE886 /* View */ = {
@@ -162,6 +179,14 @@
 				0660705D1E2668E00013BDEA /* GameScene.swift */,
 			);
 			name = View;
+			sourceTree = "<group>";
+		};
+		06D67B501E5AC0A50091C6E4 /* Music */ = {
+			isa = PBXGroup;
+			children = (
+				06D67B511E5AC0CE0091C6E4 /* music.m4a */,
+			);
+			name = Music;
 			sourceTree = "<group>";
 		};
 		144E968C398DF36E07AAD7B4 /* Pods */ = {
@@ -246,6 +271,7 @@
 			files = (
 				066070631E2668E00013BDEA /* Main.storyboard in Resources */,
 				066070651E2668E00013BDEA /* Assets.xcassets in Resources */,
+				06D67B521E5AC0CE0091C6E4 /* music.m4a in Resources */,
 				066070681E2668E00013BDEA /* LaunchScreen.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -306,12 +332,14 @@
 			buildActionMask = 2147483647;
 			files = (
 				066070711E2670D60013BDEA /* Player.swift in Sources */,
+				06D67B4D1E5ABC210091C6E4 /* ArrowPad.swift in Sources */,
 				066070851E27563E0013BDEA /* Tile.swift in Sources */,
 				066070831E2709000013BDEA /* Level.swift in Sources */,
 				060DADB91E59D53D0082D56E /* Layer.swift in Sources */,
 				0660707B1E2672B10013BDEA /* Monster.swift in Sources */,
 				0660705E1E2668E00013BDEA /* GameScene.swift in Sources */,
 				066070751E26710B0013BDEA /* Block.swift in Sources */,
+				066FEA3B1E5B3F4200D8AA53 /* Music.swift in Sources */,
 				06A673821E2E5237000BE886 /* MenuScene.swift in Sources */,
 				060DADB71E5829470082D56E /* TouchableLabel.swift in Sources */,
 				0660707D1E2677180013BDEA /* Object.swift in Sources */,
@@ -447,7 +475,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				DEVELOPMENT_TEAM = YC3AJY823Z;
 				INFOPLIST_FILE = game_beaver_damm/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.1;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.minhnguyen.game-beaver-damm";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -463,7 +491,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				DEVELOPMENT_TEAM = YC3AJY823Z;
 				INFOPLIST_FILE = game_beaver_damm/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.1;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.minhnguyen.game-beaver-damm";
 				PRODUCT_NAME = "$(TARGET_NAME)";

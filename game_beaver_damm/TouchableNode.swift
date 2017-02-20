@@ -13,13 +13,13 @@ class TouchableNode {
     
     var node = SKSpriteNode()
 
-    init(imageName: String, position: CGPoint, size: CGSize, alpha: CGFloat, layer: SKNode) {
+    init(name: String, imageName: String, position: CGPoint, size: CGSize, alpha: CGFloat, layer: SKNode) {
+        node.name = name
         node.texture = SKTexture(imageNamed: imageName)
         node.position = position
         node.zPosition = LayerZPos.touchableLayerZ
         node.size = size
         node.alpha = alpha
         layer.addChild(node)
-        
     }
 }

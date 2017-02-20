@@ -9,6 +9,7 @@
 import UIKit
 import SpriteKit
 import GoogleMobileAds
+import AVFoundation
 
 class MenuScene: SKScene {
     var viewController: GameViewController!
@@ -109,6 +110,8 @@ class MenuScene: SKScene {
     func handleTouchOnInstruct() {
         instructions = Instruction()
         instructionLayer.isHidden = false
+        addLayerBackground(layer: instructionLayer, zPos: LayerZPos.instructionLayerZ)
+        
         instructionLayer.addChild((instructions?.currentImageNode)!)
 
         let prevLblPos = CGPoint(x: -self.size.width / 3, y: 0)
@@ -162,6 +165,17 @@ class MenuScene: SKScene {
         }        
     }
     
+    override func didMove(to view: SKView) {
+        Music.loadBackgroundMusic(scene: self)
+    }
 
+    
+    
+    func addLayerBackground(layer: SKNode, zPos: CGFloat) {
+        let bg = SKSpriteNode(color: UIColor.darkGray, size: self.size)
+        bg.zPosition = zPos - 1
+        bg.position = CGPoint(x: 0, y: 0)
+        layer.addChild(bg)
+    }
 
 }
