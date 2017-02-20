@@ -14,14 +14,6 @@ class MenuScene: SKScene {
     var viewController: GameViewController!
     var bannerView: GADBannerView!
     
-    /* UI Label */
-    //var playLabel = SKLabelNode()
-    //var settingLabel = SKLabelNode()
-    //var instructLabel = SKLabelNode()
-    
-    /* Mode UI Label */
-    //var easyLabel = SKLabelNode()
-    //var hardLabel = SKLabelNode()
     var selectedDifficultyLabel = SKSpriteNode()
     
     /* Layer */
@@ -41,11 +33,12 @@ class MenuScene: SKScene {
         /* Configure and add background */
         super.init(size: size)
         self.anchorPoint = CGPoint(x: 0.5, y: 0.5)
-        buttonLayer.zPosition = 10
-        instructionLayer.zPosition = 20
-        self.addChild(buttonLayer)
-        self.addChild(instructionLayer)
         
+        buttonLayer.zPosition = LayerZPos.buttonLayerZ
+        self.addChild(buttonLayer)
+
+        instructionLayer.zPosition = LayerZPos.instructionLayerZ
+        self.addChild(instructionLayer)
         
         let easyLblPos = CGPoint(x: -self.frame.width / 4, y: 0)
         let easyLabel = TouchableLabel(text: "EASY", name: "Easy", pos: easyLblPos, layer: buttonLayer, fontName: "AvenirNext-Bold", fontSize: size.width / 10, vertAlign: .center, horzAlign: .center)
@@ -55,14 +48,15 @@ class MenuScene: SKScene {
         
         difficultyOptions = [easyLabel.node, hardLabel.node]
 
+        let labelHeight = easyLabel.node.frame.height
         
-        let playLblPos = CGPoint(x: 0, y: easyLabel.node.position.y + easyLabel.node.frame.height * 3)
+        let playLblPos = CGPoint(x: 0, y: 0 + labelHeight * 3)
         _ = TouchableLabel(text: "PLAY", name: "Play", pos: playLblPos, layer: buttonLayer, fontName: "AvenirNext-Bold", fontSize: size.width / 10, vertAlign: .center, horzAlign: .center)
         
-        let settingLblPos = CGPoint(x: 0, y: easyLabel.node.position.y - easyLabel.node.frame.height * 3)
-        let settingLabel = TouchableLabel(text: "SETTING", name: "Setting", pos: settingLblPos, layer: buttonLayer, fontName: "AvenirNext-Bold", fontSize: size.width / 10, vertAlign: .center, horzAlign: .center)
+        let settingLblPos = CGPoint(x: 0, y: 0 - labelHeight * 3)
+        _ = TouchableLabel(text: "SETTING", name: "Setting", pos: settingLblPos, layer: buttonLayer, fontName: "AvenirNext-Bold", fontSize: size.width / 10, vertAlign: .center, horzAlign: .center)
 
-        let instructLblPos = CGPoint(x: 0, y: settingLabel.node.position.y - settingLabel.node.frame.height * 3)
+        let instructLblPos = CGPoint(x: 0, y: 0 - labelHeight * 6)
         _ = TouchableLabel(text: "INSTRUCTION", name: "Instruction", pos: instructLblPos, layer: buttonLayer, fontName: "AvenirNext-Bold", fontSize: size.width / 10, vertAlign: .center, horzAlign: .center)
         
         instructionLayer.isHidden = true
@@ -115,27 +109,18 @@ class MenuScene: SKScene {
     func handleTouchOnInstruct() {
         instructions = Instruction()
         instructionLayer.isHidden = false
-        
-        let prevBtn = SKSpriteNode(color: UIColor.green, size: CGSize(width: 20, height: 20))
-        let nextBtn = SKSpriteNode(color: UIColor.green, size: CGSize(width: 20, height: 20))
-        let exitBtn = SKLabelNode(text: "Exit")
-        
-        prevBtn.position = CGPoint(x: -self.size.width / 3, y: 0)
-        prevBtn.name = "PrevBtn"
-        prevBtn.zPosition = instructionLayer.zPosition
-        
-        nextBtn.position = CGPoint(x: self.size.width / 3, y: 0)
-        nextBtn.name = "NextBtn"
-        nextBtn.zPosition = instructionLayer.zPosition
-
-        
-        exitBtn.position = CGPoint(x: 0, y: -self.size.height / 4)
-        exitBtn.name = "Exit"
-        
-        instructionLayer.addChild(prevBtn)
-        instructionLayer.addChild(nextBtn)
-        instructionLayer.addChild(exitBtn)
         instructionLayer.addChild((instructions?.currentImageNode)!)
+
+        let prevLblPos = CGPoint(x: -self.size.width / 3, y: 0)
+        let nextLblPos = CGPoint(x: self.size.width / 3, y: 0)
+        let exitLblPos = CGPoint(x: 0, y: -self.size.height / 4)
+        
+        _ = TouchableLabel(text: "PREV", name: "Prev", pos: prevLblPos, layer: instructionLayer, fontName: "AvenirNext-Bold", fontSize: size.width / 10, vertAlign: .center, horzAlign: .center)
+
+        _ = TouchableLabel(text: "NEXT", name: "Next", pos: nextLblPos, layer: instructionLayer, fontName: "AvenirNext-Bold", fontSize: size.width / 10, vertAlign: .center, horzAlign: .center)
+        
+        _ = TouchableLabel(text: "EXIT", name: "Exit", pos: exitLblPos, layer: instructionLayer, fontName: "AvenirNext-Bold", fontSize: size.width / 10, vertAlign: .center, horzAlign: .center)
+        
 
     }
     
@@ -144,14 +129,15 @@ class MenuScene: SKScene {
         let location = touch.location(in: instructionLayer)
         let touchedNode = instructionLayer.nodes(at: location).first
         
-        if touchedNode == instructionLayer.childNode(withName: "PrevBtn") {
+        if touchedNode == instructionLayer.childNode(withName: "Prev") {
             instructions?.setPrevTexture()
         }
-        if touchedNode == instructionLayer.childNode(withName: "NextBtn") {
+        if touchedNode == instructionLayer.childNode(withName: "Next") {
             instructions?.setNextTexture()
         }
         
         if touchedNode == instructionLayer.childNode(withName: "Exit") {
+            instructions = nil
             instructionLayer.removeAllChildren()
             instructionLayer.isHidden = true
         }

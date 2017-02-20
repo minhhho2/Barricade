@@ -61,4 +61,7 @@ struct LayerZPos {
     static let pauseLayerZ: CGFloat = 50
     static let gameOverLayerZ: CGFloat = 50
     static let settingLayerZ: CGFloat = 50
+    
+    static let instructionLayerZ: CGFloat = 20
+    static let buttonLayerZ: CGFloat = 10
 }

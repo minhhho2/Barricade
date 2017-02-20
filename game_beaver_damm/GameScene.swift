@@ -29,16 +29,6 @@ class GameScene: SKScene {
     let pauseLayer = SKNode()
     let gameOverLayer = SKNode()
     let settingLayer = SKNode()
-    
-    // MARK: - UI Labels
-    var menuLabel = SKLabelNode()
-    var pauseLabel = SKLabelNode()
-    var settingLabel = SKLabelNode()
-    var readyLabel: SKLabelNode? = SKLabelNode()
-    
-    // MARK: - Score Labels
-    var scoreLabel = SKLabelNode()
-    var highScoreLabel = SKLabelNode()
 
     // MARK: - UI Buttons
     var upBtn = SKSpriteNode()
@@ -96,29 +86,30 @@ class GameScene: SKScene {
         menuLayer.isHidden = true
         settingLayer.isHidden = true
     
-        /* Create and configure score labels */
-        let baseLine: CGFloat = TileHeight * CGFloat(Game.numRows) - self.size.height / 2 + TileHeight
+        let readyPos = CGPoint(x: 0, y: 0)
         
-        let scorePos = CGPoint(x: xLeft, y: baseLine)
-        configureLabelNode(node: scoreLabel, text: "SCORE: ", position: scorePos, layer: touchableLayer, horzAlign: .left)
+        _ = TouchableLabel(text: "Press To Play", name: "Ready", pos: readyPos, layer: touchableLayer, fontName: "AvenirNext-Bold", fontSize: size.width / 15, vertAlign: .bottom, horzAlign: .center)
         
-        let highScorePos = CGPoint(x: xLeft, y: baseLine + scoreLabel.frame.height * 2)
-        configureLabelNode(node: highScoreLabel, text: "HIGH SCORE: ", position: highScorePos, layer: touchableLayer, horzAlign: .left)
-        
-        let readyLblPos = CGPoint(x: 0, y: 0)
-        configureLabelNode(node:readyLabel!, text: "Press To Play", position: readyLblPos, layer: touchableLayer, horzAlign: .center)
-        
-        /* Create and configure buttons and labels */
+        let baseLine: CGFloat = TileHeight * CGFloat(Game.numRows) - self.size.height / 2
+        let labelHeight = touchableLayer.childNode(withName: "Ready")!.frame.height
         let btnSize = CGSize(width: TileWidth * 2, height: TileHeight * 2)
+
+        let scorePos = CGPoint(x: xLeft, y: baseLine)
+        _ = TouchableLabel(text: "SCORE: ", name: "Score", pos: scorePos, layer: touchableLayer, fontName: "AvenirNext-Bold", fontSize: size.width / 15, vertAlign: .bottom, horzAlign: .left)
         
-        let settingLblPos = CGPoint(x: xRight, y: baseLine)
-        configureLabelNode(node: settingLabel, text: "SETTING", position: settingLblPos, layer: touchableLayer, horzAlign: .right)
+        let highScorePos = CGPoint(x: xLeft, y: baseLine + labelHeight * 2)
+        _ = TouchableLabel(text: "HIGH SCORE: ", name: "High Score", pos: highScorePos, layer: touchableLayer, fontName: "AvenirNext-Bold", fontSize: size.width / 15, vertAlign: .bottom, horzAlign: .left)
         
-        let pauseLblPos = CGPoint(x: xRight, y: baseLine + settingLabel.frame.height)
-        configureLabelNode(node: pauseLabel, text: "PAUSE", position: pauseLblPos, layer: touchableLayer, horzAlign: .right)
         
-        let menuLblPos = CGPoint(x: xRight, y: baseLine + settingLabel.frame.height + pauseLabel.frame.height)
-        configureLabelNode(node: menuLabel, text: "MENU", position: menuLblPos, layer: touchableLayer, horzAlign: .right)
+        let settingPos = CGPoint(x: xRight, y: baseLine)
+        _ = TouchableLabel(text: "SETTING", name: "Setting", pos: settingPos, layer: touchableLayer, fontName: "AvenirNext-Bold", fontSize: size.width / 15, vertAlign: .bottom, horzAlign: .right)
+
+        let pausePos = CGPoint(x: xRight, y: baseLine + labelHeight * 2)
+        _ = TouchableLabel(text: "PAUSE", name: "Pause", pos: pausePos, layer: touchableLayer, fontName: "AvenirNext-Bold", fontSize: size.width / 15, vertAlign: .bottom, horzAlign: .right)
+
+        
+        let menuPos = CGPoint(x: xRight, y: baseLine + labelHeight * 4)
+        _ = TouchableLabel(text: "MENU", name: "Menu", pos: menuPos, layer: touchableLayer, fontName: "AvenirNext-Bold", fontSize: size.width / 15, vertAlign: .bottom, horzAlign: .right)
         
         let upBtnPos = CGPoint(x: xRight - 2.5 * btnSize.width / 2, y: yBot + 3.5 * btnSize.height)
         configureSKSpriteNode(node: upBtn, imageName: "UpArrow", position: upBtnPos, size: btnSize, alpha: 0.2)
@@ -141,9 +132,9 @@ class GameScene: SKScene {
     // MARK: - General
     
     func levelMessage(message: String) {
-        readyLabel = SKLabelNode()
-        let readyLblPos = CGPoint(x: 0, y: 0)
-        configureLabelNode(node:readyLabel!, text: message, position: readyLblPos, layer: touchableLayer, horzAlign: .center)
+        let readyPos = CGPoint(x: 0, y: 0)
+
+        _ = TouchableLabel(text: message, name: "Ready", pos: readyPos, layer: touchableLayer, fontName: "AvenirNext-Bold", fontSize: size.width / 15, vertAlign: .center, horzAlign: .center)
     }
     
     func pauseGame() {
@@ -161,17 +152,6 @@ class GameScene: SKScene {
         childLayer.position = position
         childLayer.zPosition = zPosition
         parentLayer.addChild(childLayer)
-    }
-    
-    func configureLabelNode(node: SKLabelNode, text: String, position: CGPoint, layer: SKNode, horzAlign: SKLabelHorizontalAlignmentMode) {
-        node.text = text
-        node.fontName = "GillSans-Bold"
-        node.fontSize = size.width / 15
-        node.position = position
-        node.zPosition = layer.zPosition + 1
-        node.horizontalAlignmentMode = horzAlign
-        node.verticalAlignmentMode = .bottom
-        layer.addChild(node)
     }
     
     func configureSKSpriteNode(node: SKSpriteNode, imageName: String, position: CGPoint, size: CGSize, alpha: CGFloat) {
@@ -253,6 +233,8 @@ class GameScene: SKScene {
         self.highScore = highscore as! Int
         
         //Set Score Text
+        let scoreLabel = touchableLayer.childNode(withName: "Score")! as! SKLabelNode
+        let highScoreLabel = touchableLayer.childNode(withName: "High Score")! as! SKLabelNode
         scoreLabel.text = "SCORE: \(score)"
         highScoreLabel.text = "HIGH SCORE: \(highScore)"
 
@@ -290,7 +272,7 @@ class GameScene: SKScene {
 
         let isGamePaused = self.view?.isPaused
         
-        if isGamePaused! && readyLabel != nil {
+        if isGamePaused! && touchableLayer.childNode(withName: "Ready") != nil {
             handleFirstTouchReadyText()
             return
         }
@@ -317,17 +299,17 @@ class GameScene: SKScene {
         }
         
         /* Touch on UI */
-        if touchedNode == menuLabel {
+        if touchedNode == touchableLayer.childNode(withName: "Menu") {
             handleTouchOnMenuLabel()
             return
         }
-        if touchedNode == pauseLabel {
+        if touchedNode == touchableLayer.childNode(withName: "Pause") {
             handleTouchOnPauseLabel()
             return
  
         }
         
-        if touchedNode == settingLabel {
+        if touchedNode == touchableLayer.childNode(withName: "Setting") {
             handleTouchOnSettingLabel()
             return
         }
@@ -369,36 +351,29 @@ class GameScene: SKScene {
     }
     
     func handleTouchOnSettingLabel() {
-        let saveLabel = SKLabelNode()
-        let saveLblPos = CGPoint(x: -self.size.width / 4, y: 0)
-        configureLabelNode(node: saveLabel, text: "SAVE", position: saveLblPos, layer: settingLayer, horzAlign: .center)
-        saveLabel.name = "Save"
+        let savePos = CGPoint(x: -self.size.width / 4, y: 0)
+        _ = TouchableLabel(text: "SAVE", name: "Save", pos: savePos, layer: settingLayer, fontName: "AvenirNext-Bold", fontSize: size.width / 15, vertAlign: .center, horzAlign: .center)
         
-        let cancelLabel = SKLabelNode()
-        let cancelLblPos = CGPoint(x: self.size.width / 4, y: 0)
-        configureLabelNode(node: cancelLabel, text: "CANCEL", position: cancelLblPos, layer: settingLayer, horzAlign: .center)
-        cancelLabel.name = "Cancel"
+        let cancelPos = CGPoint(x: self.size.width / 4, y: 0)
+        _ = TouchableLabel(text: "CANCEL", name: "Cancel", pos: cancelPos, layer: settingLayer, fontName: "AvenirNext-Bold", fontSize: size.width / 15, vertAlign: .center, horzAlign: .center)
         
         showLayerPauseGame(layer: settingLayer)
     }
     
     func handleTouchOnMenuLabel() {
-        let centre = CGPoint(x: 0, y: 0)
-        let menuMessage = SKLabelNode()
-        configureLabelNode(node: menuMessage, text: "Leaving Game, Are You Sure?", position: centre, layer: menuLayer, horzAlign: .center)
+        let cancelPos = CGPoint(x: 0, y: 0)
         
-        let yesLabel = SKLabelNode()
-        let yesPos = CGPoint(x: 0, y: 0 - menuMessage.frame.height * 2)
-        configureLabelNode(node: yesLabel, text: "Yes", position: yesPos, layer: menuLayer, horzAlign: .center)
-        yesLabel.name = "Yes"
+        _ = TouchableLabel(text: "Leaving Game, Are You Sure?", name: "Menu", pos: cancelPos, layer: menuLayer, fontName: "AvenirNext-Bold", fontSize: size.width / 15, vertAlign: .center, horzAlign: .center)
+
+        let labelHeight = menuLayer.childNode(withName: "Menu")!.frame.height
+  
+        let yesPos = CGPoint(x: 0, y: 0 - labelHeight * 2)
+        _ = TouchableLabel(text: "Yes", name: "Yes", pos: yesPos, layer: menuLayer, fontName: "AvenirNext-Bold", fontSize: size.width / 15, vertAlign: .center, horzAlign: .center)
         
-        let cancelLabel = SKLabelNode()
-        let cancelPos = CGPoint(x: 0, y: 0 - menuMessage.frame.height * 4)
-        configureLabelNode(node: cancelLabel, text: "No", position: cancelPos, layer: menuLayer, horzAlign: .center)
-        cancelLabel.name = "Cancel"
+        let noPos = CGPoint(x: 0, y: 0 - labelHeight * 4)
+        _ = TouchableLabel(text: "No", name: "No", pos: noPos, layer: menuLayer, fontName: "AvenirNext-Bold", fontSize: size.width / 15, vertAlign: .center, horzAlign: .center)
 
         showLayerPauseGame(layer: menuLayer)
-        
     }
     
     func handleTouchOnPauseLabel() {
@@ -409,19 +384,16 @@ class GameScene: SKScene {
         pauseBG.position = centre
         pauseLayer.addChild(pauseBG)
         
-        let resumeGame = SKLabelNode()
-        configureLabelNode(node: resumeGame, text: Message.newGame, position: centre, layer: pauseLayer, horzAlign: .center)
+        _ = TouchableLabel(text: Message.newGame, name: "New Game", pos: centre, layer: pauseLayer, fontName: "AvenirNext-Bold", fontSize: size.width / 15, vertAlign: .center, horzAlign: .center)
         
         showLayerPauseGame(layer: pauseLayer)
     }
-    
-    
+
     func handleFirstTouchReadyText() {
-        readyLabel?.removeFromParent()
-        readyLabel = nil
+        let readyLabel = touchableLayer.childNode(withName: "Ready")
+        readyLabel!.removeFromParent()
         unpauseGame()
     }
-
     
     // MARK: - Handle touch on Layers
     func handleTouchOnPauseLayer() {
@@ -433,8 +405,8 @@ class GameScene: SKScene {
         let location = touch.location(in: gameOverLayer)
         let touchedNode = gameOverLayer.nodes(at: location).first
         
-        let newGameLabel = gameOverLayer.childNode(withName: "NewGame")
-        let restartLevelLabel = gameOverLayer.childNode(withName: "RestartLevel")
+        let newGameLabel = gameOverLayer.childNode(withName: "New Game")
+        let restartLevelLabel = gameOverLayer.childNode(withName: "Restart Level")
         
         if touchedNode == newGameLabel || touchedNode == restartLevelLabel {
             gameOverLayer.isHidden = true
@@ -468,10 +440,9 @@ class GameScene: SKScene {
             skView.presentScene(scene)
         }
         
-        if touchedNode == menuLayer.childNode(withName: "Cancel") {
+        if touchedNode == menuLayer.childNode(withName: "No") {
             hideLayerUnpauseGame(layer: menuLayer)
         }
-        
     }
     
     // MARK: - Enemy move
@@ -538,6 +509,7 @@ class GameScene: SKScene {
         }
     }
     func updateScore() {
+        let scoreLabel = touchableLayer.childNode(withName: "Score")! as! SKLabelNode
         scoreLabel.text = "SCORE: \(score)"
     }
     
@@ -547,12 +519,15 @@ class GameScene: SKScene {
             let secondDefaults: UserDefaults = UserDefaults.standard
             secondDefaults.set(highScore, forKey: "Highscore")
             secondDefaults.synchronize()
+            
+            let highScoreLabel = touchableLayer.childNode(withName: "High Score")! as! SKLabelNode
             highScoreLabel.text = "HIGH SCORE: \(highScore)"
         }
     }
     
     func addScore() {
         self.score += 1
+        let scoreLabel = touchableLayer.childNode(withName: "Score")! as! SKLabelNode
         scoreLabel.text = "SCORE: \(score)"
     }
     
@@ -589,23 +564,27 @@ class GameScene: SKScene {
     func handleGameOver() {
         gameOverLayer.isHidden = false
         
-        let gameOverLabel = SKLabelNode()
-        configureLabelNode(node: gameOverLabel, text: "Game Over!", position: CGPoint(x: 0, y: 0), layer: gameOverLayer, horzAlign: .center)
-        
-        let scoreLabel = SKLabelNode()
-        let scoreLblPos = CGPoint(x: 0, y: -gameOverLabel.frame.height * 2)
-        let scoreText: String = (score > highScore) ? "New High Score: \(score)" : "Score: \(score)"
-        configureLabelNode(node: scoreLabel, text: scoreText, position: scoreLblPos, layer: gameOverLayer, horzAlign: .center)
+        let centre = CGPoint(x: 0, y: 0)
 
-        let newGameLabel = SKLabelNode()
-        let newGameLblPos = CGPoint(x: 0, y: -gameOverLabel.frame.height * 4)
-        configureLabelNode(node: newGameLabel, text: "Start New Game", position: newGameLblPos, layer: gameOverLayer, horzAlign: .center)
-        newGameLabel.name = "NewGame"
+        _ = TouchableLabel(text: "Game Over!", name: "Game Over", pos: centre, layer: gameOverLayer, fontName: "AvenirNext-Bold", fontSize: size.width / 15, vertAlign: .center, horzAlign: .center)
         
-        let restartLevelLabel = SKLabelNode()
-        let restartLevelLbl = CGPoint(x: 0, y: -gameOverLabel.frame.height * 6)
-        configureLabelNode(node: restartLevelLabel, text: "Restart Level", position: restartLevelLbl, layer: gameOverLayer, horzAlign: .center)
-        restartLevelLabel.name = "RestartLevel"
+        let labelHeight = gameOverLayer.childNode(withName: "Game Over")!.frame.height
+        
+        let scoreText: String = (score > highScore) ? "New High Score: \(score)" : "Score: \(score)"
+        let scorePos = CGPoint(x: 0, y: -labelHeight * 2)
+
+        
+        _ = TouchableLabel(text: scoreText, name: "Game Over", pos: scorePos, layer: gameOverLayer, fontName: "AvenirNext-Bold", fontSize: size.width / 15, vertAlign: .center, horzAlign: .center)
+
+        let newGamePos = CGPoint(x: 0, y: -labelHeight * 4)
+
+        _ = TouchableLabel(text: "Start New Game", name: "New Game", pos: newGamePos, layer: gameOverLayer, fontName: "AvenirNext-Bold", fontSize: size.width / 15, vertAlign: .center, horzAlign: .center)
+
+        
+    
+        let restartPos = CGPoint(x: 0, y: -labelHeight * 6)
+        _ = TouchableLabel(text: "Restart Level", name: "Restart Level", pos: restartPos, layer: gameOverLayer, fontName: "AvenirNext-Bold", fontSize: size.width / 15, vertAlign: .center, horzAlign: .center)
+
     }
     
     // MARK: - Handle Button Touch
@@ -760,5 +739,6 @@ class GameScene: SKScene {
         }
         return  possibleMoves
     }
+    
 
 }
