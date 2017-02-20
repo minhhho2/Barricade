@@ -19,7 +19,6 @@ class GameViewController: UIViewController, GADInterstitialDelegate, Interstitia
     var bannerView: GADBannerView!
     var interstitialAd : GADInterstitial!
 
-
     
     // MARK: - Default functions
     override var prefersStatusBarHidden: Bool {
@@ -37,13 +36,10 @@ class GameViewController: UIViewController, GADInterstitialDelegate, Interstitia
     override func viewDidLoad() {
         super.viewDidLoad()
         
-
         let skView = view as! SKView
         let size = skView.bounds.size
         let scene = MenuScene(size: size)
-        
         scene.viewController = self
-
         scene.scaleMode = .aspectFill
         scene.size = size
         skView.isMultipleTouchEnabled = false
@@ -51,8 +47,6 @@ class GameViewController: UIViewController, GADInterstitialDelegate, Interstitia
         skView.presentScene(scene)
         skView.showsFPS = true
         skView.showsNodeCount = true
-        
-        //scene.sceneDelegate = self
         
         if bannerView == nil {
             initializeBanner()
@@ -66,7 +60,6 @@ class GameViewController: UIViewController, GADInterstitialDelegate, Interstitia
     // MARK: - AdMob Functions
     func loadRequest() {
         let request = GADRequest()
-        
         request.testDevices = [kGADSimulatorID]
         bannerView.load(request)
     }
@@ -76,7 +69,6 @@ class GameViewController: UIViewController, GADInterstitialDelegate, Interstitia
         bannerView = GADBannerView(adSize: kGADAdSizeSmartBannerPortrait)
         bannerView.adUnitID = "ca-app-pub-3940256099942544/2934735716"
         bannerView.rootViewController = self
-        
         view!.addSubview(bannerView)
     }
     
@@ -94,8 +86,8 @@ class GameViewController: UIViewController, GADInterstitialDelegate, Interstitia
     }
     
     func showInterstitialAd() {
-        print("showing ad")
         if interstitialAd.isReady {
+            print("showing interstitial")
             interstitialAd.present(fromRootViewController: self)
         } else {
             print("interstitial not ready")
@@ -107,7 +99,6 @@ class GameViewController: UIViewController, GADInterstitialDelegate, Interstitia
         let size = skView.bounds.size
         let scene = MenuScene(size: size)
         scene.viewController = self
-        //scene.sceneDelegate = self
         
         scene.scaleMode = .aspectFill
         scene.size = size
@@ -133,14 +124,4 @@ class GameViewController: UIViewController, GADInterstitialDelegate, Interstitia
         skView.showsNodeCount = true
         
     }
-    
-    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
-        print("touch")
-        //showInterstitialAd()
-    }
-    
-    func printLine() {
-        print("Printing Line")
-    }
-    
 }
