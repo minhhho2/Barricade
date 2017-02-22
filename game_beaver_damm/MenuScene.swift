@@ -53,9 +53,6 @@ class MenuScene: SKScene {
         
         let playLblPos = CGPoint(x: 0, y: 0 + labelHeight * 3)
         _ = TouchableLabel(text: "PLAY", name: "Play", pos: playLblPos, layer: buttonLayer, fontName: "AvenirNext-Bold", fontSize: size.width / 10, vertAlign: .center, horzAlign: .center)
-        
-        let settingLblPos = CGPoint(x: 0, y: 0 - labelHeight * 3)
-        _ = TouchableLabel(text: "SETTING", name: "Setting", pos: settingLblPos, layer: buttonLayer, fontName: "AvenirNext-Bold", fontSize: size.width / 10, vertAlign: .center, horzAlign: .center)
 
         let instructLblPos = CGPoint(x: 0, y: 0 - labelHeight * 6)
         _ = TouchableLabel(text: "INSTRUCTION", name: "Instruction", pos: instructLblPos, layer: buttonLayer, fontName: "AvenirNext-Bold", fontSize: size.width / 10, vertAlign: .center, horzAlign: .center)

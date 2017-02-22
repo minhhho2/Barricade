@@ -291,12 +291,14 @@ class GameScene: SKScene {
 
         
         if touchedNode == touchableLayer.childNode(withName: "Up Alpha") {
+            run(Music.getSound(sound: Sounds.click))
             arrowPad?.increaseAlpha()
             arrowPad?.setAllArrowAlpha(to: arrowPad!.alpha)
             return
         }
         
         if touchedNode == touchableLayer.childNode(withName: "Down Alpha") {
+            run(Music.getSound(sound: Sounds.click))
             arrowPad?.decreaseAlpha()
             arrowPad?.setAllArrowAlpha(to: arrowPad!.alpha)
             return
@@ -309,6 +311,7 @@ class GameScene: SKScene {
             let newImage = "Player\(newPlayerDirection.rawValue)"
             Player.sharedIntance.getSprite().texture = SKTexture(imageNamed: newImage)
             self.handleMove(direction: newPlayerDirection)
+            run(Music.getSound(sound: Sounds.playerMove))
             return
         }
     }

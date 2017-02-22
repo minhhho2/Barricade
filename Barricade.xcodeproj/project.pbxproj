@@ -258,7 +258,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 0660704F1E2668E00013BDEA /* Build configuration list for PBXProject "game_beaver_damm" */;
+			buildConfigurationList = 0660704F1E2668E00013BDEA /* Build configuration list for PBXProject "Barricade" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
@@ -519,7 +519,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		0660704F1E2668E00013BDEA /* Build configuration list for PBXProject "game_beaver_damm" */ = {
+		0660704F1E2668E00013BDEA /* Build configuration list for PBXProject "Barricade" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				0660706A1E2668E00013BDEA /* Debug */,
