@@ -28,7 +28,6 @@ class GameScene: SKScene {
     let menuLayer = SKNode()
     let pauseLayer = SKNode()
     let gameOverLayer = SKNode()
-    let settingLayer = SKNode()
 
     // MARK: - UI
     var arrowPad: ArrowPad?
@@ -75,12 +74,10 @@ class GameScene: SKScene {
         configureLayer(parentLayer: gameLayer, childLayer: pauseLayer, position: pointCenter, zPosition: LayerZPos.pauseLayerZ)
         configureLayer(parentLayer: gameLayer, childLayer: gameOverLayer, position: pointCenter, zPosition: LayerZPos.gameOverLayerZ)
         configureLayer(parentLayer: gameLayer, childLayer: menuLayer, position: pointCenter, zPosition: LayerZPos.menuLayerZ)
-        configureLayer(parentLayer: gameLayer, childLayer: settingLayer, position: pointCenter, zPosition: LayerZPos.settingLayerZ)
         
         pauseLayer.isHidden = true
         gameOverLayer.isHidden = true
         menuLayer.isHidden = true
-        settingLayer.isHidden = true
     
         let readyPos = CGPoint(x: 0, y: 0)
         
@@ -95,9 +92,6 @@ class GameScene: SKScene {
         
         let highScorePos = CGPoint(x: xLeft, y: baseLine + labelHeight * 1.75)
         _ = TouchableLabel(text: "HIGH SCORE: ", name: "High Score", pos: highScorePos, layer: touchableLayer, fontName: "AvenirNext-Bold", fontSize: size.width / 15, vertAlign: .bottom, horzAlign: .left)
-        
-        let settingPos = CGPoint(x: xRight, y: baseLine)
-        _ = TouchableLabel(text: "SETTING", name: "Setting", pos: settingPos, layer: touchableLayer, fontName: "AvenirNext-Bold", fontSize: size.width / 15, vertAlign: .bottom, horzAlign: .right)
 
         let pausePos = CGPoint(x: xRight, y: baseLine + labelHeight * 1.75)
         _ = TouchableLabel(text: "PAUSE", name: "Pause", pos: pausePos, layer: touchableLayer, fontName: "AvenirNext-Bold", fontSize: size.width / 15, vertAlign: .bottom, horzAlign: .right)
@@ -107,6 +101,12 @@ class GameScene: SKScene {
         _ = TouchableLabel(text: "MENU", name: "Menu", pos: menuPos, layer: touchableLayer, fontName: "AvenirNext-Bold", fontSize: size.width / 15, vertAlign: .bottom, horzAlign: .right)
         
         arrowPad = ArrowPad(arrSize: btnSize, xRight: xRight, yBot: yBot, layer: touchableLayer)
+        
+        let downPos = CGPoint(x: xRight - btnSize.width, y: baseLine)
+        _ = TouchableLabel(text: "DOWN", name: "Down Alpha", pos: downPos, layer: touchableLayer, fontName: "AvenirNext-Bold", fontSize: size.width / 15, vertAlign: .bottom, horzAlign: .right)
+        
+        let upPos = CGPoint(x: xRight, y: baseLine)
+        _ = TouchableLabel(text: "UP", name: "Up Alpha", pos: upPos, layer: touchableLayer, fontName: "AvenirNext-Bold", fontSize: size.width / 15, vertAlign: .bottom, horzAlign: .right)
         
         startNewGame(stage: Game.initialStage, score: 0)
  
@@ -152,7 +152,6 @@ class GameScene: SKScene {
         pauseLayer.removeAllChildren()
         gameOverLayer.removeAllChildren()
         menuLayer.removeAllChildren()
-        settingLayer.removeAllChildren()
         Player.sharedIntance.resetColRow()
         
         self.score = score
@@ -275,11 +274,6 @@ class GameScene: SKScene {
             return
         }
         
-        if !settingLayer.isHidden {
-            handleTouchOnSettingLayer(touches: touches)
-            return
-        }
-        
         /* Touch on UI */
         if touchedNode == touchableLayer.childNode(withName: "Menu") {
             handleTouchOnMenuLabel()
@@ -294,13 +288,20 @@ class GameScene: SKScene {
             handleTouchOnPauseLabel()
             return
         }
+
         
-        if touchedNode == touchableLayer.childNode(withName: "Setting") {
-            
-            
-            handleTouchOnSettingLabel()
+        if touchedNode == touchableLayer.childNode(withName: "Up Alpha") {
+            arrowPad?.increaseAlpha()
+            arrowPad?.setAllArrowAlpha(to: arrowPad!.alpha)
             return
         }
+        
+        if touchedNode == touchableLayer.childNode(withName: "Down Alpha") {
+            arrowPad?.decreaseAlpha()
+            arrowPad?.setAllArrowAlpha(to: arrowPad!.alpha)
+            return
+        }
+        
 
         /* Touch on arrow */
         if !(isGamePaused)! && !isGameOver && touchedNode != nil && arrowPad!.containsNode(node: touchedNode) {
@@ -331,19 +332,8 @@ class GameScene: SKScene {
         pauseGame()
     }
     
-    func handleTouchOnSettingLabel() {
-        addLayerBackground(layer: settingLayer, zPos: LayerZPos.settingLayerZ)
-
-        let savePos = CGPoint(x: -self.size.width / 4, y: 0)
-        _ = TouchableLabel(text: "SAVE", name: "Save", pos: savePos, layer: settingLayer, fontName: "AvenirNext-Bold", fontSize: size.width / 15, vertAlign: .center, horzAlign: .center)
-        
-        let cancelPos = CGPoint(x: self.size.width / 4, y: 0)
-        _ = TouchableLabel(text: "CANCEL", name: "Cancel", pos: cancelPos, layer: settingLayer, fontName: "AvenirNext-Bold", fontSize: size.width / 15, vertAlign: .center, horzAlign: .center)
-        
-        showLayerPauseGame(layer: settingLayer)
-    }
-    
     func handleTouchOnMenuLabel() {
+        run(Music.getSound(sound: Sounds.click))
         addLayerBackground(layer: menuLayer, zPos: LayerZPos.menuLayerZ)
 
         let cancelPos = CGPoint(x: 0, y: 0)
@@ -362,6 +352,7 @@ class GameScene: SKScene {
     }
     
     func handleTouchOnPauseLabel() {
+        run(Music.getSound(sound: Sounds.click))
         addLayerBackground(layer: pauseLayer, zPos: LayerZPos.pauseLayerZ)
 
         let centre = CGPoint(x: 0, y: 0)
@@ -377,19 +368,7 @@ class GameScene: SKScene {
     }
     
     // MARK: - Handle touch on Layers
-    func handleTouchOnSettingLayer(touches: Set<UITouch>){
-        let touch = touches.first! as UITouch
-        let location = touch.location(in: menuLayer)
-        let touchedNode = settingLayer.nodes(at: location).first
-        
-        if touchedNode == settingLayer.childNode(withName: "Cancel") {
-            hideLayerUnpauseGame(layer: settingLayer)
-        }
-        
-        if touchedNode == settingLayer.childNode(withName: "Save") {
-            hideLayerUnpauseGame(layer: settingLayer)
-        }
-    }
+    
     
     func handleTouchOnPauseLayer() {
         hideLayerUnpauseGame(layer: pauseLayer)

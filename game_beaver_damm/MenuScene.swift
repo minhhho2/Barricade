@@ -85,18 +85,12 @@ class MenuScene: SKScene {
         }
         
         if touchedNode == buttonLayer.childNode(withName: "Play") {
-            let scene = GameScene(size: self.size, difficulty: difficulty)
-            scene.interstitialDelegate = viewController
-            let skView = self.view! as SKView
-            skView.ignoresSiblingOrder = true
-            scene.scaleMode = .aspectFill
-            scene.size = skView.bounds.size
-            skView.presentScene(scene)
+            handleTouchOnPlay()
             return
         }
         
         if touchedNode != nil && difficultyOptions.contains(touchedNode!) {
-            setDifficulty(node: touchedNode!)
+            handleTouchOnDifficulty(node: touchedNode!)
             return
         }
         if touchedNode == buttonLayer.childNode(withName: "Instruction") {
@@ -106,12 +100,22 @@ class MenuScene: SKScene {
     }
     
     // MARK: - Touch
+    func handleTouchOnPlay() {
+        run(Music.getSound(sound: Sounds.click))
+        let scene = GameScene(size: self.size, difficulty: difficulty)
+        scene.interstitialDelegate = viewController
+        let skView = self.view! as SKView
+        skView.ignoresSiblingOrder = true
+        scene.scaleMode = .aspectFill
+        scene.size = skView.bounds.size
+        skView.presentScene(scene)
+    }
     
     func handleTouchOnInstruct() {
+        run(Music.getSound(sound: Sounds.click))
         instructions = Instruction()
         instructionLayer.isHidden = false
         addLayerBackground(layer: instructionLayer, zPos: LayerZPos.instructionLayerZ)
-        
         instructionLayer.addChild((instructions?.currentImageNode)!)
 
         let prevLblPos = CGPoint(x: -self.size.width / 3, y: 0)
@@ -124,7 +128,6 @@ class MenuScene: SKScene {
         
         _ = TouchableLabel(text: "EXIT", name: "Exit", pos: exitLblPos, layer: instructionLayer, fontName: "AvenirNext-Bold", fontSize: size.width / 10, vertAlign: .center, horzAlign: .center)
         
-
     }
     
     func handleTouchOnInstructLayer(touches: Set<UITouch>) {
@@ -133,13 +136,16 @@ class MenuScene: SKScene {
         let touchedNode = instructionLayer.nodes(at: location).first
         
         if touchedNode == instructionLayer.childNode(withName: "Prev") {
+            run(Music.getSound(sound: Sounds.click))
             instructions?.setPrevTexture()
         }
         if touchedNode == instructionLayer.childNode(withName: "Next") {
+            run(Music.getSound(sound: Sounds.click))
             instructions?.setNextTexture()
         }
         
         if touchedNode == instructionLayer.childNode(withName: "Exit") {
+            run(Music.getSound(sound: Sounds.click))
             instructions = nil
             instructionLayer.removeAllChildren()
             instructionLayer.isHidden = true
@@ -147,7 +153,8 @@ class MenuScene: SKScene {
     }
     
     // MARK: - Feature
-    func setDifficulty(node: SKNode) {
+    func handleTouchOnDifficulty(node: SKNode) {
+        run(Music.getSound(sound: Sounds.click))
         let easyLabel = buttonLayer.childNode(withName: "Easy")!
         let hardLabel = buttonLayer.childNode(withName: "Hard")!
 
@@ -167,6 +174,7 @@ class MenuScene: SKScene {
     
     override func didMove(to view: SKView) {
         Music.loadBackgroundMusic(scene: self)
+        Music.preloadSounds()
     }
 
     
