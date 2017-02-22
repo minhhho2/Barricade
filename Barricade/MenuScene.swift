@@ -25,6 +25,7 @@ class MenuScene: SKScene {
     var difficulty: TimeInterval = Difficulty.easy
     var difficultyOptions: Array<SKNode> = []
     var instructions: Instruction?
+    var isMute: Bool = false
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder) is not used in this app")
@@ -54,8 +55,14 @@ class MenuScene: SKScene {
         let playLblPos = CGPoint(x: 0, y: 0 + labelHeight * 3)
         _ = TouchableLabel(text: "PLAY", name: "Play", pos: playLblPos, layer: buttonLayer, fontName: "AvenirNext-Bold", fontSize: size.width / 10, vertAlign: .center, horzAlign: .center)
 
-        let instructLblPos = CGPoint(x: 0, y: 0 - labelHeight * 6)
+        let instructLblPos = CGPoint(x: 0, y: 0 - labelHeight * 3)
         _ = TouchableLabel(text: "INSTRUCTION", name: "Instruction", pos: instructLblPos, layer: buttonLayer, fontName: "AvenirNext-Bold", fontSize: size.width / 10, vertAlign: .center, horzAlign: .center)
+        
+        let soundPos = CGPoint(x: -self.size.width / 2 + 25, y: self.size.height / 2 - 100)
+        let size = CGSize(width: size.width / CGFloat(Game.numCols), height: size.height / CGFloat(Game.numCols))
+        
+        _ = TouchableNode(name: "Mute", imageName: "Block", position: soundPos, size: size, alpha: 1.0, layer: buttonLayer)
+        
         
         instructionLayer.isHidden = true
         
@@ -92,6 +99,11 @@ class MenuScene: SKScene {
         }
         if touchedNode == buttonLayer.childNode(withName: "Instruction") {
             handleTouchOnInstruct()
+            return
+        }
+        
+        if touchedNode == buttonLayer.childNode(withName: "Mute") {
+            Music.toggleSound(scene: self, layer: buttonLayer)
             return
         }
     }

@@ -34,6 +34,7 @@ class GameScene: SKScene {
     
     /* Game variables */
     var isGameOver: Bool = false
+    var isMute: Bool = false
     var score: Int = 0
     var highScore: Int = 0
     var level: Level!
@@ -244,6 +245,13 @@ class GameScene: SKScene {
         for t in touches { self.touchUp(atPoint: t.location(in: self)) }
     }
     
+    func playSound(sound: Sounds) {
+        if !isMute {
+            run(Music.getSound(sound: sound))
+        }
+
+    }
+    
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
         let touch = touches.first! as UITouch
         let location = touch.location(in: touchableLayer)
@@ -291,14 +299,14 @@ class GameScene: SKScene {
 
         
         if touchedNode == touchableLayer.childNode(withName: "Up Alpha") {
-            run(Music.getSound(sound: Sounds.click))
+            playSound(sound: Sounds.click)
             arrowPad?.increaseAlpha()
             arrowPad?.setAllArrowAlpha(to: arrowPad!.alpha)
             return
         }
         
         if touchedNode == touchableLayer.childNode(withName: "Down Alpha") {
-            run(Music.getSound(sound: Sounds.click))
+            playSound(sound: Sounds.click)
             arrowPad?.decreaseAlpha()
             arrowPad?.setAllArrowAlpha(to: arrowPad!.alpha)
             return
@@ -307,11 +315,11 @@ class GameScene: SKScene {
 
         /* Touch on arrow */
         if !(isGamePaused)! && !isGameOver && touchedNode != nil && arrowPad!.containsNode(node: touchedNode) {
+            playSound(sound: Sounds.playerMove)
             let newPlayerDirection = getDirectionOfTouch(node: touchedNode!)
             let newImage = "Player\(newPlayerDirection.rawValue)"
             Player.sharedIntance.getSprite().texture = SKTexture(imageNamed: newImage)
             self.handleMove(direction: newPlayerDirection)
-            run(Music.getSound(sound: Sounds.playerMove))
             return
         }
     }
@@ -336,7 +344,7 @@ class GameScene: SKScene {
     }
     
     func handleTouchOnMenuLabel() {
-        run(Music.getSound(sound: Sounds.click))
+        playSound(sound: Sounds.click)
         addLayerBackground(layer: menuLayer, zPos: LayerZPos.menuLayerZ)
 
         let cancelPos = CGPoint(x: 0, y: 0)
@@ -355,7 +363,7 @@ class GameScene: SKScene {
     }
     
     func handleTouchOnPauseLabel() {
-        run(Music.getSound(sound: Sounds.click))
+        playSound(sound: Sounds.click)
         addLayerBackground(layer: pauseLayer, zPos: LayerZPos.pauseLayerZ)
 
         let centre = CGPoint(x: 0, y: 0)

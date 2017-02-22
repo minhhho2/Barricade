@@ -20,8 +20,11 @@ enum Sounds: String {
 
 class Music {
     
+    static var isMute: Bool = false
+    
     static func loadBackgroundMusic(scene: SKScene) {
         let backgroundMusic = SKAudioNode(fileNamed: "music.m4a")
+        backgroundMusic.name = "Background Music"
         backgroundMusic.autoplayLooped = true
         scene.addChild(backgroundMusic)
     }
@@ -37,6 +40,22 @@ class Music {
                 
             }
         } catch {
+        }
+    }
+    
+    
+    static func toggleSound(scene: SKScene, layer: SKNode) {
+        let bgMusicNode = scene.childNode(withName: "Background Music")
+        let muteNode = layer.childNode(withName: "Mute")! as! SKSpriteNode
+        
+        if isMute {
+            bgMusicNode?.run(SKAction.play())
+            muteNode.texture = SKTexture(imageNamed: "PlayerLeft")
+            isMute = false
+        } else {
+            bgMusicNode?.run(SKAction.pause())
+            muteNode.texture = SKTexture(imageNamed: "PlayerRight")
+            isMute = true
         }
     }
     
