@@ -14,13 +14,13 @@ class SettingPad {
         
         let size = CGSize(width: arrSize.width / 2, height: arrSize.height / 2)
         
-        let soundPos = CGPoint(x: xPos + arrSize.width, y: yPos)
+        let soundPos = CGPoint(x: xPos + 0.5 * arrSize.width, y: yPos)
         
         _ = TouchableNode(name: "Mute", imageName: "Block", position: soundPos, size: size, alpha: 1.0, layer: layer)
         
-        let downPos = CGPoint(x: xPos + 2 * arrSize.width, y: yPos)
+        let downPos = CGPoint(x: xPos + 1.5 * arrSize.width, y: yPos)
         
-        let upPos = CGPoint(x: xPos + 3 * arrSize.width, y: yPos)
+        let upPos = CGPoint(x: xPos + 2.5 * arrSize.width, y: yPos)
 
         _ = TouchableNode(name: "Down Alpha", imageName: "Block", position: downPos, size: size, alpha: 1.0, layer: layer)
 

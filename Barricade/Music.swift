@@ -16,6 +16,7 @@ enum Sounds: String {
     case playerDie = "playerDie"
     case click = "click" // "click"
     case newHighScore = "newHighScore"
+    case boxMove = "explosion"
 }
 
 class Music {
@@ -34,7 +35,7 @@ class Music {
     
     static func preloadSounds() {
         do {
-            let sounds : Array<String> = ["click", "playerMove"]
+            let sounds : Array<String> = ["click", "playerMove", "explosion"]
             for sound in sounds {
                 let path : String = Bundle.main.path(forResource: sound, ofType: "wav")!
                 let url : URL = URL(fileURLWithPath: path)

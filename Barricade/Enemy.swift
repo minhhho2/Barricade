@@ -15,7 +15,7 @@ class Enemy: Monster {
     var lastDirection: Direction = Direction.down
     
     init(col: Int, row: Int) {
-        super.init(col: col, row: row, imageName: Constants.CROC_SRITE)
+        super.init(col: col, row: row, imageName: ImageName.enemyStart)
     }
     
 

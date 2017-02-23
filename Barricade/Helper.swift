@@ -13,11 +13,11 @@ enum Direction: String {
     case none = "None", up = "Up", down = "Down", left = "Left", right = "Right"
 }
 
-struct Constants {
+struct ImageName {
     /* Initial Sprites */
-    static let playerSprite: String = "PlayerDown"
-    static let CROC_SRITE: String = "Croc"
-    static let BLOCK_SPRITE: String = "Block"
+    static let playerStart: String = "PlayerDown"
+    static let enemyStart: String = "EnemyDown"
+    static let block: String = "Block"
 }
 
 struct Message {

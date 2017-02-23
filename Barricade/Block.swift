@@ -12,7 +12,7 @@ import SpriteKit
 class Block: Object {
 
     init(col: Int, row: Int) {
-        super.init(col: col, row: row, imageName: Constants.BLOCK_SPRITE)
+        super.init(col: col, row: row, imageName: ImageName.block)
     }
     
     

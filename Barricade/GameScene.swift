@@ -179,12 +179,12 @@ class GameScene: SKScene {
     func addTiles() {
         for row in 0..<Game.numRows {
             for col in 0..<Game.numCols {
-                if level.tileAt(col: col, row: row) != nil {
+                //if level.tileAt(col: col, row: row) != nil {
                     let tileNode = SKSpriteNode(imageNamed: "Tile")
                     tileNode.size = CGSize(width: TileWidth, height: TileHeight)
                     tileNode.position = pointFor(col: col, row: row)
                     tileLayer.addChild(tileNode)
-                }
+                //}
             }
         }
     }
@@ -317,7 +317,7 @@ class GameScene: SKScene {
 
         /* Touch on arrow */
         if !(isGamePaused)! && !isGameOver && touchedNode != nil && arrowPad!.containsNode(node: touchedNode) {
-            Music.playSound(scene: self, sound: Sounds.click)
+            Music.playSound(scene: self, sound: Sounds.playerMove)
             let newPlayerDirection = getDirectionOfTouch(node: touchedNode!)
             let newImage = "Player\(newPlayerDirection.rawValue)"
             Player.sharedIntance.getSprite().texture = SKTexture(imageNamed: newImage)
@@ -459,6 +459,8 @@ class GameScene: SKScene {
             if level.objectAt(col: position.col, row: position.row) is Player {
                 isGameOver = true
             } else {
+                let newImage = "Enemy\(nextMove.rawValue)"
+                enemy.getSprite().texture = SKTexture(imageNamed: newImage)
                 animateMove(newCol: position.col, newRow: position.row, objectA: enemy, block: nil)
                 level.updateArrayWithMove(objectA: enemy, objectB: nil, newObjectAPos: (position.col, position.row))
             }
@@ -594,6 +596,7 @@ class GameScene: SKScene {
             if level.isBlockPushable(objectA: Player.sharedIntance, objectB: objectAtNewPos!) == false {
                 return
             }
+            Music.playSound(scene: self, sound: Sounds.boxMove)
             animateMove(newCol: position.col, newRow: position.row, objectA: Player.sharedIntance, block: objectAtNewPos!)
             level.updateArrayWithMove(objectA: Player.sharedIntance, objectB: objectAtNewPos!)
             
