@@ -31,6 +31,7 @@ class GameScene: SKScene {
 
     // MARK: - UI
     var arrowPad: ArrowPad?
+    var settingPad: SettingPad?
     
     /* Game variables */
     var isGameOver: Bool = false
@@ -102,12 +103,16 @@ class GameScene: SKScene {
         _ = TouchableLabel(text: "MENU", name: "Menu", pos: menuPos, layer: touchableLayer, fontName: "AvenirNext-Bold", fontSize: size.width / 15, vertAlign: .bottom, horzAlign: .right)
         
         arrowPad = ArrowPad(arrSize: btnSize, xRight: xRight, yBot: yBot, layer: touchableLayer)
+        settingPad = SettingPad(arrSize: btnSize, xPos: xLeft, yPos: baseLine + labelHeight * 3.5, layer: touchableLayer)
+        
+        /*
         
         let downPos = CGPoint(x: xRight - btnSize.width, y: baseLine)
         _ = TouchableLabel(text: "DOWN", name: "Down Alpha", pos: downPos, layer: touchableLayer, fontName: "AvenirNext-Bold", fontSize: size.width / 15, vertAlign: .bottom, horzAlign: .right)
         
         let upPos = CGPoint(x: xRight, y: baseLine)
         _ = TouchableLabel(text: "UP", name: "Up Alpha", pos: upPos, layer: touchableLayer, fontName: "AvenirNext-Bold", fontSize: size.width / 15, vertAlign: .bottom, horzAlign: .right)
+ */
         
         startNewGame(stage: Game.initialStage, score: 0)
  
@@ -245,13 +250,6 @@ class GameScene: SKScene {
         for t in touches { self.touchUp(atPoint: t.location(in: self)) }
     }
     
-    func playSound(sound: Sounds) {
-        if !isMute {
-            run(Music.getSound(sound: sound))
-        }
-
-    }
-    
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
         let touch = touches.first! as UITouch
         let location = touch.location(in: touchableLayer)
@@ -296,17 +294,21 @@ class GameScene: SKScene {
             handleTouchOnPauseLabel()
             return
         }
-
+        
+        if touchedNode == touchableLayer.childNode(withName: "Mute") {
+            Music.toggleSound(scene: self, layer: touchableLayer)
+            return
+        }
         
         if touchedNode == touchableLayer.childNode(withName: "Up Alpha") {
-            playSound(sound: Sounds.click)
+            Music.playSound(scene: self, sound: Sounds.click)
             arrowPad?.increaseAlpha()
             arrowPad?.setAllArrowAlpha(to: arrowPad!.alpha)
             return
         }
         
         if touchedNode == touchableLayer.childNode(withName: "Down Alpha") {
-            playSound(sound: Sounds.click)
+            Music.playSound(scene: self, sound: Sounds.click)
             arrowPad?.decreaseAlpha()
             arrowPad?.setAllArrowAlpha(to: arrowPad!.alpha)
             return
@@ -315,7 +317,7 @@ class GameScene: SKScene {
 
         /* Touch on arrow */
         if !(isGamePaused)! && !isGameOver && touchedNode != nil && arrowPad!.containsNode(node: touchedNode) {
-            playSound(sound: Sounds.playerMove)
+            Music.playSound(scene: self, sound: Sounds.click)
             let newPlayerDirection = getDirectionOfTouch(node: touchedNode!)
             let newImage = "Player\(newPlayerDirection.rawValue)"
             Player.sharedIntance.getSprite().texture = SKTexture(imageNamed: newImage)
@@ -344,7 +346,7 @@ class GameScene: SKScene {
     }
     
     func handleTouchOnMenuLabel() {
-        playSound(sound: Sounds.click)
+        Music.playSound(scene: self, sound: Sounds.click)
         addLayerBackground(layer: menuLayer, zPos: LayerZPos.menuLayerZ)
 
         let cancelPos = CGPoint(x: 0, y: 0)
@@ -363,7 +365,7 @@ class GameScene: SKScene {
     }
     
     func handleTouchOnPauseLabel() {
-        playSound(sound: Sounds.click)
+        Music.playSound(scene: self, sound: Sounds.click)
         addLayerBackground(layer: pauseLayer, zPos: LayerZPos.pauseLayerZ)
 
         let centre = CGPoint(x: 0, y: 0)

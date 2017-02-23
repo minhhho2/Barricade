@@ -27,6 +27,9 @@ class Music {
         backgroundMusic.name = "Background Music"
         backgroundMusic.autoplayLooped = true
         scene.addChild(backgroundMusic)
+        if isMute {
+            backgroundMusic.run(SKAction.pause())
+        }
     }
     
     static func preloadSounds() {
@@ -59,9 +62,11 @@ class Music {
         }
     }
     
-    static func getSound(sound: Sounds) -> SKAction {
-        let filename = sound.rawValue
-        return SKAction.playSoundFileNamed(filename, waitForCompletion: false)
-
+    static func playSound(scene: SKScene, sound: Sounds) {
+        if !isMute {
+            let filename = sound.rawValue
+            let sound = SKAction.playSoundFileNamed(filename, waitForCompletion: false)
+            scene.run(sound)
+        }
     }
 }

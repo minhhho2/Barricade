@@ -110,7 +110,7 @@ class MenuScene: SKScene {
     
     // MARK: - Touch
     func handleTouchOnPlay() {
-        run(Music.getSound(sound: Sounds.click))
+        Music.playSound(scene: self, sound: Sounds.click)
         let scene = GameScene(size: self.size, difficulty: difficulty)
         scene.interstitialDelegate = viewController
         let skView = self.view! as SKView
@@ -121,7 +121,7 @@ class MenuScene: SKScene {
     }
     
     func handleTouchOnInstruct() {
-        run(Music.getSound(sound: Sounds.click))
+        Music.playSound(scene: self, sound: Sounds.click)
         instructions = Instruction()
         instructionLayer.isHidden = false
         addLayerBackground(layer: instructionLayer, zPos: LayerZPos.instructionLayerZ)
@@ -145,16 +145,16 @@ class MenuScene: SKScene {
         let touchedNode = instructionLayer.nodes(at: location).first
         
         if touchedNode == instructionLayer.childNode(withName: "Prev") {
-            run(Music.getSound(sound: Sounds.click))
+            Music.playSound(scene: self, sound: Sounds.click)
             instructions?.setPrevTexture()
         }
         if touchedNode == instructionLayer.childNode(withName: "Next") {
-            run(Music.getSound(sound: Sounds.click))
+            Music.playSound(scene: self, sound: Sounds.click)
             instructions?.setNextTexture()
         }
         
         if touchedNode == instructionLayer.childNode(withName: "Exit") {
-            run(Music.getSound(sound: Sounds.click))
+            Music.playSound(scene: self, sound: Sounds.click)
             instructions = nil
             instructionLayer.removeAllChildren()
             instructionLayer.isHidden = true
@@ -163,7 +163,7 @@ class MenuScene: SKScene {
     
     // MARK: - Feature
     func handleTouchOnDifficulty(node: SKNode) {
-        run(Music.getSound(sound: Sounds.click))
+        Music.playSound(scene: self, sound: Sounds.click)
         let easyLabel = buttonLayer.childNode(withName: "Easy")!
         let hardLabel = buttonLayer.childNode(withName: "Hard")!
 
