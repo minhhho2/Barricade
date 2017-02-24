@@ -30,7 +30,7 @@ class Instruction {
         currentImageNode = SKSpriteNode(texture: firstInstructTexture)
         currentImageNode.size = CGSize(width: 75, height: 75)
         currentImageNode.position = CGPoint(x: 0, y: 0)
-        currentImageNode.zPosition = 20
+        currentImageNode.zPosition = LayerZPos.instructionLayerZ
         currentImageNode.name = "CurrentImage"
     }
     

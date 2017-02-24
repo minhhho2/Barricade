@@ -36,7 +36,9 @@ class GameScene: SKScene {
     /* Game variables */
     var isGameOver: Bool = false
     var isMute: Bool = false
+    
     var score: Int = 0
+    var newLevelScore: Int = 0
     var highScore: Int = 0
     var level: Level!
 
@@ -95,11 +97,11 @@ class GameScene: SKScene {
         let highScorePos = CGPoint(x: xLeft, y: baseLine + labelHeight * 1.75)
         _ = TouchableLabel(text: "HIGH SCORE: ", name: "High Score", pos: highScorePos, layer: touchableLayer, fontName: "AvenirNext-Bold", fontSize: size.width / 15, vertAlign: .bottom, horzAlign: .left)
 
-        let pausePos = CGPoint(x: xRight, y: baseLine + labelHeight * 1.75)
+        let pausePos = CGPoint(x: xRight, y: baseLine)
         _ = TouchableLabel(text: "PAUSE", name: "Pause", pos: pausePos, layer: touchableLayer, fontName: "AvenirNext-Bold", fontSize: size.width / 15, vertAlign: .bottom, horzAlign: .right)
 
         
-        let menuPos = CGPoint(x: xRight, y: baseLine + labelHeight * 3.5)
+        let menuPos = CGPoint(x: xRight, y: baseLine + labelHeight * 1.75)
         _ = TouchableLabel(text: "MENU", name: "Menu", pos: menuPos, layer: touchableLayer, fontName: "AvenirNext-Bold", fontSize: size.width / 15, vertAlign: .bottom, horzAlign: .right)
         
         arrowPad = ArrowPad(arrSize: btnSize, xRight: xRight, yBot: yBot, layer: touchableLayer)
@@ -316,9 +318,16 @@ class GameScene: SKScene {
         
 
         /* Touch on arrow */
-        if !(isGamePaused)! && !isGameOver && touchedNode != nil && arrowPad!.containsNode(node: touchedNode) {
+        //let yDist: CGFloat = (self.size.height - TileHeight * CGFloat(Game.numRows)) / 2
+        
+        let yfallsDownBy = self.size.height / 2 - (TileHeight * CGFloat(Game.numRows) / 2)
+        //print("location \(location.y) and \(TileHeight * CGFloat(Game.numRows) / 2 - yfallsDownBy)")
+        
+        let topLineOfBoardFromZeroAnchor = TileHeight * CGFloat(Game.numRows) / 2 - yfallsDownBy
+        
+        if !(isGamePaused)! && !isGameOver && location.y <= topLineOfBoardFromZeroAnchor{ //&& touchedNode != nil && arrowPad!.containsNode(node: touchedNode) {
             Music.playSound(scene: self, sound: Sounds.playerMove)
-            let newPlayerDirection = getDirectionOfTouch(node: touchedNode!)
+            let newPlayerDirection = getDirectionOfTouch(node: location) //touchedNode!)
             let newImage = "Player\(newPlayerDirection.rawValue)"
             Player.sharedIntance.getSprite().texture = SKTexture(imageNamed: newImage)
             self.handleMove(direction: newPlayerDirection)
@@ -409,6 +418,7 @@ class GameScene: SKScene {
             self.interstitialDelegate?.showInterstitialAd()
             startNewGame(stage: level.getStage(), score: self.score)
             levelMessage(message: "Restart Level! Tap To Continue!")
+            score = newLevelScore
         }
     }
     
@@ -489,6 +499,7 @@ class GameScene: SKScene {
             level.nextStage()
             startNewGame(stage: level.getStage(), score: self.score)
             levelMessage(message: "Next Level! Tap To Continue!")
+            self.newLevelScore = score
         }
     }
     
@@ -629,7 +640,26 @@ class GameScene: SKScene {
     }
     
     // MARK: - Function helpers
-    func getDirectionOfTouch(node: SKNode) -> Direction {
+    func getDirectionOfTouch(node: CGPoint) -> Direction { //SKNode) -> Direction {
+        
+        let direction: Direction
+        let x = node.x
+        let y = node.y + 80
+        let totalX = self.size.width / 2
+        let totalY = self.size.height / 2
+        
+        // leftright or updown
+        if abs(x) / totalX >= abs(y) / totalY {
+            direction = (x >= 0) ? Direction.right : Direction.left
+        } else {
+            direction = y >= 0 ? Direction.up : Direction.down
+        }
+        return direction
+        
+        /*
+        
+        print("x: \(node.position.x), y: \(node.position.y)")
+        
         switch node {
         case touchableLayer.childNode(withName: "Up")!: return Direction.up
         case touchableLayer.childNode(withName: "Down")!: return Direction.down
@@ -637,6 +667,7 @@ class GameScene: SKScene {
         case touchableLayer.childNode(withName: "Right")!: return Direction.right
         default: return Direction.none
         }
+         */
     }
     
     /* Convert (col, row) to point */

@@ -20,6 +20,7 @@ class TouchableLabel {
         
         // Create and add label to layer
         node = SKLabelNode()
+        node.fontColor = UIColor.white
         node.text = text
         node.name = name
         node.position = pos

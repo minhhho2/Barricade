@@ -20,6 +20,7 @@ class MenuScene: SKScene {
     /* Layer */
     var buttonLayer = SKNode()
     var instructionLayer = SKNode()
+    var backgroundLayer = SKNode()
     
     /* Data */
     var difficulty: TimeInterval = Difficulty.easy
@@ -35,12 +36,17 @@ class MenuScene: SKScene {
         /* Configure and add background */
         super.init(size: size)
         self.anchorPoint = CGPoint(x: 0.5, y: 0.5)
-        
+
         buttonLayer.zPosition = LayerZPos.buttonLayerZ
         self.addChild(buttonLayer)
 
         instructionLayer.zPosition = LayerZPos.instructionLayerZ
         self.addChild(instructionLayer)
+        instructionLayer.isHidden = true
+        
+        backgroundLayer.zPosition = LayerZPos.menuBackgroundLayerZ
+        self.addChild(backgroundLayer)
+        
         
         let easyLblPos = CGPoint(x: -self.frame.width / 4, y: 0)
         let easyLabel = TouchableLabel(text: "EASY", name: "Easy", pos: easyLblPos, layer: buttonLayer, fontName: "AvenirNext-Bold", fontSize: size.width / 10, vertAlign: .center, horzAlign: .center)
@@ -58,23 +64,27 @@ class MenuScene: SKScene {
         let instructLblPos = CGPoint(x: 0, y: 0 - labelHeight * 3)
         _ = TouchableLabel(text: "INSTRUCTION", name: "Instruction", pos: instructLblPos, layer: buttonLayer, fontName: "AvenirNext-Bold", fontSize: size.width / 10, vertAlign: .center, horzAlign: .center)
         
-        let soundPos = CGPoint(x: -self.size.width / 2 + 25, y: self.size.height / 2 - 100)
-        let size = CGSize(width: size.width / CGFloat(Game.numCols), height: size.height / CGFloat(Game.numCols))
+        let soundPos = CGPoint(x: self.size.width / 2 - (size.height / CGFloat(Game.numCols) / 2),
+                               y: -self.size.height / 2 + (size.height / CGFloat(Game.numRows) / 2))
+        let soundSize = CGSize(width: size.width / CGFloat(Game.numCols), height: size.height / CGFloat(Game.numCols))
         
-        _ = TouchableNode(name: "Mute", imageName: "Block", position: soundPos, size: size, alpha: 1.0, layer: buttonLayer)
+        _ = TouchableNode(name: "Mute", imageName: "Block", position: soundPos, size: soundSize, alpha: 1.0, layer: buttonLayer)
         
-        
-        instructionLayer.isHidden = true
+        Background.addLayerBG(size: size, bgLayer: backgroundLayer)
+        Background.addNodeFrame(nodeLayer: buttonLayer, frameLayer: backgroundLayer)
         
         setDifficultyUI()
     }
     
+    
+    
     func setDifficultyUI() {
         let easyLabel = buttonLayer.childNode(withName: "Easy")!
-        let difficultySelectorSize = CGSize(width: easyLabel.frame.width + 5, height: easyLabel.frame.height + 5)
-        selectedDifficultyLabel = SKSpriteNode(color: UIColor.black, size: difficultySelectorSize)
+        let difficultySelectorSize = CGSize(width: easyLabel.frame.width + 10,height: easyLabel.frame.height + 10)
+        selectedDifficultyLabel = SKSpriteNode(color: UIColor.gray, size: difficultySelectorSize)
         selectedDifficultyLabel.position = easyLabel.position
-        self.addChild(selectedDifficultyLabel)
+        selectedDifficultyLabel.zPosition = LayerZPos.menuBackgroundLayerZ + 2
+        backgroundLayer.addChild(selectedDifficultyLabel)
     }
     
     // MARK: - touch functions
