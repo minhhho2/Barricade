@@ -290,8 +290,6 @@ class GameScene: SKScene {
         }
     }
     
-
-    
     func addLayerBackground(layer: SKNode, zPos: CGFloat) {
         let bg = SKSpriteNode(color: UIColor.darkGray, size: self.size)
         bg.zPosition = zPos - 1

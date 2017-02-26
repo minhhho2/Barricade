@@ -19,8 +19,6 @@ class GameViewController: UIViewController, GADInterstitialDelegate, Interstitia
     var bannerView: GADBannerView!
     var interstitialAd : GADInterstitial!
 
-    
-    // MARK: - Default functions
     override var prefersStatusBarHidden: Bool {
         return true
     }
@@ -45,8 +43,8 @@ class GameViewController: UIViewController, GADInterstitialDelegate, Interstitia
         skView.isMultipleTouchEnabled = false
         skView.ignoresSiblingOrder = true
         skView.presentScene(scene)
-        skView.showsFPS = true
-        skView.showsNodeCount = true
+        //skView.showsFPS = true
+        //skView.showsNodeCount = true
         
         if bannerView == nil {
             initializeBanner()
@@ -92,36 +90,5 @@ class GameViewController: UIViewController, GADInterstitialDelegate, Interstitia
         } else {
             print("interstitial not ready")
         }
-    }
-    
-    func showMenuScene() {
-        let skView = view as! SKView
-        let size = skView.bounds.size
-        let scene = MenuScene(size: size)
-        scene.viewController = self
-        
-        scene.scaleMode = .aspectFill
-        scene.size = size
-        skView.isMultipleTouchEnabled = false
-        skView.ignoresSiblingOrder = true
-        skView.presentScene(scene)
-        skView.showsFPS = true
-        skView.showsNodeCount = true
-        
-    }
-    
-    func showGameScene(difficulty: TimeInterval) {
-        let skView = view as! SKView
-        let size = skView.bounds.size
-        let scene = GameScene(size: size, difficulty: difficulty)
-        scene.viewController = self
-        scene.scaleMode = .aspectFill
-        scene.size = size
-        skView.isMultipleTouchEnabled = false
-        skView.ignoresSiblingOrder = true
-        skView.presentScene(scene)
-        skView.showsFPS = true
-        skView.showsNodeCount = true
-        
     }
 }
