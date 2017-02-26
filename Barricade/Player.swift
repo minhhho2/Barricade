@@ -22,5 +22,9 @@ class Player: Monster {
         self.setColRow(newCol: 0, newRow: 0)
     }
 
+    func changeSpriteDirection(direction: Direction) {
+        let newImage = "Player\(direction.rawValue)"
+        Player.sharedIntance.getSprite().texture = SKTexture(imageNamed: newImage)
+    }
     
 }

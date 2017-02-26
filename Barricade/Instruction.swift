@@ -12,26 +12,35 @@ import SpriteKit
 class Instruction {
     
     var instructFilenames: Array<String> = []
+    var insturctSize: Array<CGFloat> = []
     var imageNamePrefix: String = "Instruction_"
     var currentImageIndex: Int = 0
     
+    var instruct1 = SKLabelNode()
+    
     var currentImageNode = SKSpriteNode()
     
-    init() {
+    init(size: CGSize) {
         // Add instruction file names
-        for i in 0..<3 {
+        for i in 0..<5 {
             let imageName = "\(imageNamePrefix)\(i)"
             print(imageName)
             instructFilenames.append(imageName)
         }
-        
+                
         // create node for instructions
         let firstInstructTexture = SKTexture(imageNamed: instructFilenames[0])
         currentImageNode = SKSpriteNode(texture: firstInstructTexture)
-        currentImageNode.size = CGSize(width: 75, height: 75)
+        
+        currentImageNode.size = CGSize(width: size.width / 1.5, height: size.height / 1.5)
         currentImageNode.position = CGPoint(x: 0, y: 0)
         currentImageNode.zPosition = LayerZPos.instructionLayerZ
         currentImageNode.name = "CurrentImage"
+        
+        instruct1.fontSize = size.width / 15
+        
+        
+        
     }
     
     func setNextTexture() {

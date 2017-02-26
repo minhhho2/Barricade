@@ -18,7 +18,8 @@ class Enemy: Monster {
         super.init(col: col, row: row, imageName: ImageName.enemyStart)
     }
     
-
-    
-    
+    func changeSpriteDirection(direction: Direction) {
+        let newImage = "Enemy\(direction.rawValue)"
+        self.getSprite().texture = SKTexture(imageNamed: newImage)
+    }
 }

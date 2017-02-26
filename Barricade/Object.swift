@@ -59,6 +59,8 @@ class Object: Hashable {
         self.col = newCol
     }
     
+
+    
     /* Comparison function for hashable protocol */
     static func ==(lhs: Object, rhs: Object) -> Bool {
         return lhs.col == rhs.col && lhs.row == rhs.row 

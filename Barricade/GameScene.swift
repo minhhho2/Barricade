@@ -30,8 +30,8 @@ class GameScene: SKScene {
     let gameOverLayer = SKNode()
 
     // MARK: - UI
-    var arrowPad: ArrowPad?
-    var settingPad: SettingPad?
+    //var arrowPad: ArrowPad?
+    //var settingPad: SettingPad?
     
     /* Game variables */
     var isGameOver: Bool = false
@@ -68,7 +68,7 @@ class GameScene: SKScene {
         let pointCenter = CGPoint(x: 0, y: 0)
         let xLeft = -self.size.width / 2
         let xRight = self.size.width / 2
-        let yBot = -self.size.height / 2
+        //let yBot = -self.size.height / 2
         
         configureLayer(parentLayer: self, childLayer: gameLayer, position: pointCenter, zPosition: LayerZPos.gameLayerZ)
         configureLayer(parentLayer: gameLayer, childLayer: tileLayer, position: pointBotLeft, zPosition: LayerZPos.tileLayerZ)
@@ -84,29 +84,27 @@ class GameScene: SKScene {
         menuLayer.isHidden = true
     
         let readyPos = CGPoint(x: 0, y: 0)
-        
-        _ = TouchableLabel(text: "Press To Play", name: "Ready", pos: readyPos, layer: touchableLayer, fontName: "AvenirNext-Bold", fontSize: size.width / 15, vertAlign: .center, horzAlign: .center)
-        
-        let baseLine: CGFloat = TileHeight * CGFloat(Game.numRows) - self.size.height / 2
+        _ = TouchableLabel(text: Message.newGame, name: "Ready", pos: readyPos, layer: touchableLayer, fontName: "AvenirNext-Bold", fontSize: size.width / 8, vertAlign: .center, horzAlign: .center)
+
+        let baseLine: CGFloat = TileHeight * (CGFloat(Game.numRows) + 0.5) - self.size.height / 2
         let labelHeight = touchableLayer.childNode(withName: "Ready")!.frame.height
-        let btnSize = CGSize(width: TileWidth * 2, height: TileHeight * 2)
 
         let scorePos = CGPoint(x: xLeft, y: baseLine)
         _ = TouchableLabel(text: "SCORE: ", name: "Score", pos: scorePos, layer: touchableLayer, fontName: "AvenirNext-Bold", fontSize: size.width / 15, vertAlign: .bottom, horzAlign: .left)
         
-        let highScorePos = CGPoint(x: xLeft, y: baseLine + labelHeight * 1.75)
+        let highScorePos = CGPoint(x: xLeft, y: baseLine + labelHeight)
         _ = TouchableLabel(text: "HIGH SCORE: ", name: "High Score", pos: highScorePos, layer: touchableLayer, fontName: "AvenirNext-Bold", fontSize: size.width / 15, vertAlign: .bottom, horzAlign: .left)
 
         let pausePos = CGPoint(x: xRight, y: baseLine)
         _ = TouchableLabel(text: "PAUSE", name: "Pause", pos: pausePos, layer: touchableLayer, fontName: "AvenirNext-Bold", fontSize: size.width / 15, vertAlign: .bottom, horzAlign: .right)
 
         
-        let menuPos = CGPoint(x: xRight, y: baseLine + labelHeight * 1.75)
+        let menuPos = CGPoint(x: xRight, y: baseLine + labelHeight)
         _ = TouchableLabel(text: "MENU", name: "Menu", pos: menuPos, layer: touchableLayer, fontName: "AvenirNext-Bold", fontSize: size.width / 15, vertAlign: .bottom, horzAlign: .right)
         
-        arrowPad = ArrowPad(arrSize: CGSize(width: TileWidth, height: TileHeight), xRight: xRight, yBot: yBot, layer: touchableLayer, size: size)
+        //arrowPad = ArrowPad(arrSize: CGSize(width: TileWidth, height: TileHeight), xRight: xRight, yBot: yBot, layer: touchableLayer, size: size)
         
-        settingPad = SettingPad(arrSize: btnSize, xPos: xLeft, yPos: baseLine + labelHeight * 3.5, layer: touchableLayer)
+        //settingPad = SettingPad(arrSize: btnSize, xPos: xLeft, yPos: baseLine + labelHeight * 3.5, layer: touchableLayer)
         
         /*
         
@@ -226,8 +224,6 @@ class GameScene: SKScene {
         scoreLabel.text = "SCORE: \(score)"
         highScoreLabel.text = "HIGH SCORE: \(highScore)"
         
-        Music.loadBackgroundMusic(scene: self)
-
     }
 
     
@@ -297,13 +293,13 @@ class GameScene: SKScene {
             handleTouchOnPauseLabel()
             return
         }
-        
+        /*
         if touchedNode == touchableLayer.childNode(withName: "Mute") {
             Music.toggleSound(scene: self, layer: touchableLayer)
             return
-        }
+        }*/
         
-        if touchedNode == touchableLayer.childNode(withName: "Up Alpha") {
+       /* if touchedNode == touchableLayer.childNode(withName: "Up Alpha") {
             Music.playSound(scene: self, sound: Sounds.click)
             arrowPad?.increaseAlpha()
             arrowPad?.setAllArrowAlpha(to: arrowPad!.alpha)
@@ -315,26 +311,22 @@ class GameScene: SKScene {
             arrowPad?.decreaseAlpha()
             arrowPad?.setAllArrowAlpha(to: arrowPad!.alpha)
             return
-        }
-        
-
-        /* Touch on arrow */
-        //let yDist: CGFloat = (self.size.height - TileHeight * CGFloat(Game.numRows)) / 2
+        }*/
         
         let yfallsDownBy = self.size.height / 2 - (TileHeight * CGFloat(Game.numRows) / 2)
-        //print("location \(location.y) and \(TileHeight * CGFloat(Game.numRows) / 2 - yfallsDownBy)")
         
         let topLineOfBoardFromZeroAnchor = TileHeight * CGFloat(Game.numRows) / 2 - yfallsDownBy
         
         if !(isGamePaused)! && !isGameOver && location.y <= topLineOfBoardFromZeroAnchor{ //&& touchedNode != nil && arrowPad!.containsNode(node: touchedNode) {
             Music.playSound(scene: self, sound: Sounds.playerMove)
             let newPlayerDirection = getDirectionOfTouch(node: location) //touchedNode!)
-            let newImage = "Player\(newPlayerDirection.rawValue)"
-            Player.sharedIntance.getSprite().texture = SKTexture(imageNamed: newImage)
+            Player.sharedIntance.changeSpriteDirection(direction: newPlayerDirection)
             self.handleMove(direction: newPlayerDirection)
             return
         }
     }
+    
+
     
     func addLayerBackground(layer: SKNode, zPos: CGFloat) {
         let bg = SKSpriteNode(color: UIColor.darkGray, size: self.size)
@@ -379,12 +371,13 @@ class GameScene: SKScene {
         addLayerBackground(layer: pauseLayer, zPos: LayerZPos.pauseLayerZ)
 
         let centre = CGPoint(x: 0, y: 0)
-        _ = TouchableLabel(text: Message.newGame, name: "New Game", pos: centre, layer: pauseLayer, fontName: "AvenirNext-Bold", fontSize: size.width / 15, vertAlign: .center, horzAlign: .center)
+        _ = TouchableLabel(text: Message.resumeGame, name: "Pause Game", pos: centre, layer: pauseLayer, fontName: "AvenirNext-Bold", fontSize: size.width / 15, vertAlign: .center, horzAlign: .center)
         
         showLayerPauseGame(layer: pauseLayer)
     }
 
     func handleFirstTouchReadyText() {
+        Music.playSound(scene: self, sound: Sounds.click)
         let readyLabel = touchableLayer.childNode(withName: "Ready")
         readyLabel!.removeFromParent()
         unpauseGame()
@@ -401,8 +394,7 @@ class GameScene: SKScene {
         let touch = touches.first! as UITouch
         let location = touch.location(in: gameOverLayer)
         let touchedNode = gameOverLayer.nodes(at: location).first
-        
-        
+        Music.playSound(scene: self, sound: Sounds.click)
         
         let newGameLabel = gameOverLayer.childNode(withName: "New Game")
         let restartLevelLabel = gameOverLayer.childNode(withName: "Restart Level")
@@ -429,7 +421,8 @@ class GameScene: SKScene {
         let touch = touches.first! as UITouch
         let location = touch.location(in: menuLayer)
         let touchedNode = menuLayer.nodes(at: location).first
-        
+        Music.playSound(scene: self, sound: Sounds.click)
+
         if touchedNode == menuLayer.childNode(withName: "Yes") {
             Player.sharedIntance.resetColRow()
             let scene: SKScene = MenuScene(size: self.size)
@@ -468,12 +461,12 @@ class GameScene: SKScene {
             let nextMove = enemyMoves[moveIndex]
             let position = getNewPositionFromDirection(col: enemy.getCol(), row: enemy.getRow(), direction: nextMove)
             enemy.lastDirection = nextMove
+            enemy.changeSpriteDirection(direction: nextMove)
+
             
             if level.objectAt(col: position.col, row: position.row) is Player {
                 isGameOver = true
             } else {
-                let newImage = "Enemy\(nextMove.rawValue)"
-                enemy.getSprite().texture = SKTexture(imageNamed: newImage)
                 animateMove(newCol: position.col, newRow: position.row, objectA: enemy, block: nil)
                 level.updateArrayWithMove(objectA: enemy, objectB: nil, newObjectAPos: (position.col, position.row))
             }
@@ -488,12 +481,15 @@ class GameScene: SKScene {
                 checkEnemyCanMove(currentTime - lastTime)
                 lastTime = currentTime
                 updateEnemyStates()
+            } else {
+                if gameOverLayer.isHidden {
+                    handleGameOver()
+                }
             }
         }
         updateScore()
         updateHighScore()
         checkNextLevel()
-        checkGameOver()
     }
     
     // MARK: - Routine check
@@ -506,11 +502,6 @@ class GameScene: SKScene {
         }
     }
     
-    func checkGameOver() {
-        if isGameOver && gameOverLayer.isHidden {
-            handleGameOver()
-        }
-    }
     func updateScore() {
         let scoreLabel = touchableLayer.childNode(withName: "Score")! as! SKLabelNode
         scoreLabel.text = "SCORE: \(score)"
@@ -554,9 +545,11 @@ class GameScene: SKScene {
         for enemy in deadEnemies {
             // remove from array and board and screen
             let index = level.enemies.index(of: enemy)
+            enemy.getSprite().texture = SKTexture(imageNamed: "EnemyDead")
+            
             level.enemies.remove(at: index!)
-            level.removeFromBoard(col: enemy.getCol(), row: enemy.getRow())
-            objectLayer.removeChildren(in: [enemy.getSprite() as SKNode])
+            //level.removeFromBoard(col: enemy.getCol(), row: enemy.getRow())
+            //objectLayer.removeChildren(in: [enemy.getSprite() as SKNode])
             
             // add to array and screen
             //let newEnemies: Set<Enemy> = [level.spawnNewEnemy(), level.spawnNewEnemy()]
@@ -566,8 +559,6 @@ class GameScene: SKScene {
     
     func handleGameOver() {
         gameOverLayer.isHidden = false
-        
-        
         
         let centre = CGPoint(x: 0, y: 0)
 
@@ -583,9 +574,9 @@ class GameScene: SKScene {
 
         let newGamePos = CGPoint(x: 0, y: -labelHeight * 4)
 
-        _ = TouchableLabel(text: "Start New Game", name: "New Game", pos: newGamePos, layer: gameOverLayer, fontName: "AvenirNext-Bold", fontSize: size.width / 15, vertAlign: .center, horzAlign: .center)
+        _ = TouchableLabel(text: "New Game", name: "New Game", pos: newGamePos, layer: gameOverLayer, fontName: "AvenirNext-Bold", fontSize: size.width / 15, vertAlign: .center, horzAlign: .center)
         
-        let bg = SKSpriteNode(color: UIColor.darkGray, size: CGSize(width: self.size.width / 1.5, height: self.size.height / 2))
+        let bg = SKSpriteNode(color: UIColor.darkGray, size: CGSize(width: self.size.width / 1.5, height: self.size.height / 2.5))
         bg.zPosition = LayerZPos.gameOverLayerZ - 1
         bg.position = CGPoint(x: 0, y: 0 - labelHeight * 2.5)
         gameOverLayer.addChild(bg)
@@ -617,7 +608,6 @@ class GameScene: SKScene {
             if level.isBlockPushable(objectA: Player.sharedIntance, objectB: objectAtNewPos!) == false {
                 return
             }
-            Music.playSound(scene: self, sound: Sounds.boxMove)
             animateMove(newCol: position.col, newRow: position.row, objectA: Player.sharedIntance, block: objectAtNewPos!)
             level.updateArrayWithMove(objectA: Player.sharedIntance, objectB: objectAtNewPos!)
             

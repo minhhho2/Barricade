@@ -132,14 +132,14 @@ class MenuScene: SKScene {
     
     func handleTouchOnInstruct() {
         Music.playSound(scene: self, sound: Sounds.click)
-        instructions = Instruction()
+        instructions = Instruction(size: size)
         instructionLayer.isHidden = false
         addLayerBackground(layer: instructionLayer, zPos: LayerZPos.instructionLayerZ)
         instructionLayer.addChild((instructions?.currentImageNode)!)
 
-        let prevLblPos = CGPoint(x: -self.size.width / 3, y: -self.size.height / 3.5)
-        let nextLblPos = CGPoint(x: self.size.width / 3, y: -self.size.height / 3.5)
-        let exitLblPos = CGPoint(x: 0, y: -self.size.height / 2.5)
+        let prevLblPos = CGPoint(x: -self.size.width / 3, y: -self.size.height / 2.25)
+        let nextLblPos = CGPoint(x: self.size.width / 3, y: -self.size.height / 2.25)
+        let exitLblPos = CGPoint(x: 0, y: -self.size.height / 2.25)
         
         _ = TouchableLabel(text: "PREV", name: "Prev", pos: prevLblPos, layer: instructionLayer, fontName: "AvenirNext-Bold", fontSize: size.width / 10, vertAlign: .center, horzAlign: .center)
 
@@ -192,7 +192,6 @@ class MenuScene: SKScene {
     }
     
     override func didMove(to view: SKView) {
-        Music.loadBackgroundMusic(scene: self)
         Music.preloadSounds()
     }
 
