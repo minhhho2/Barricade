@@ -12,8 +12,7 @@ import SpriteKit
 
 enum Sounds: String {
     case playerMove = "playerMove"
-    case click = "click" // "click"
-    case newHighScore = "newHighScore"
+    case click = "click"
 }
 
 class Music {
@@ -30,19 +29,6 @@ class Music {
                 player.prepareToPlay()
             }
         } catch {
-        }
-    }
-    
-    
-    static func toggleSound(scene: SKScene, layer: SKNode) {
-        let muteNode = layer.childNode(withName: "Mute")! as! SKSpriteNode
-        
-        if isMute {
-            muteNode.texture = SKTexture(imageNamed: "Unmute")
-            isMute = false
-        } else {
-            muteNode.texture = SKTexture(imageNamed: "Mute")
-            isMute = true
         }
     }
     

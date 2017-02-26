@@ -63,15 +63,9 @@ class MenuScene: SKScene {
 
         let instructLblPos = CGPoint(x: 0, y: 0 - labelHeight * 3)
         _ = TouchableLabel(text: "INSTRUCTION", name: "Instruction", pos: instructLblPos, layer: buttonLayer, fontName: "AvenirNext-Bold", fontSize: size.width / 10, vertAlign: .center, horzAlign: .center)
-        
-        let soundPos = CGPoint(x: self.size.width / 2 - (size.height / CGFloat(Game.numCols) / 2),
-                               y: -self.size.height / 2 + (size.height / CGFloat(Game.numRows) / 2))
-        let soundSize = CGSize(width: size.width / CGFloat(Game.numCols), height: size.height / CGFloat(Game.numCols))
-        
-        _ = TouchableNode(name: "Mute", imageName: "Unmute", position: soundPos, size: soundSize, alpha: 1.0, layer: buttonLayer)
-        
-        Background.addLayerBG(size: size, bgLayer: backgroundLayer)
-        Background.addNodeFrame(nodeLayer: buttonLayer, frameLayer: backgroundLayer)
+
+        addMenuSceneBG()
+        addEasyHardNodeFrame()
         
         setDifficultyUI()
     }
@@ -109,11 +103,6 @@ class MenuScene: SKScene {
         }
         if touchedNode == buttonLayer.childNode(withName: "Instruction") {
             handleTouchOnInstruct()
-            return
-        }
-        
-        if touchedNode == buttonLayer.childNode(withName: "Mute") {
-            Music.toggleSound(scene: self, layer: buttonLayer)
             return
         }
     }
@@ -201,5 +190,32 @@ class MenuScene: SKScene {
         bg.position = CGPoint(x: 0, y: 0)
         layer.addChild(bg)
     }
-
+    
+    func addMenuSceneBG() {
+        let numRow = self.size.height / 50
+        let numCol = self.size.width / 50
+        let w = self.size.width / numCol
+        let h = self.size.height / numRow
+        
+        for row in 0...Int(numRow) {
+            for col in 0...Int(numCol) {
+                let node = SKSpriteNode(imageNamed: "Tile")
+                node.size = CGSize(width: w, height: h)
+                node.position = CGPoint(x: CGFloat(col) * w - size.width / 2,
+                                        y: CGFloat(row) * h - size.height / 2)
+                node.zPosition = LayerZPos.menuBackgroundLayerZ - 1
+                backgroundLayer.addChild(node)
+            }
+        }
+    }
+    
+    func addEasyHardNodeFrame() {
+        for node in buttonLayer.children {
+            let bgSize = CGSize(width: node.frame.width + 10, height: node.frame.height + 10)
+            let nodeBG = SKSpriteNode(color: UIColor.black, size: bgSize)
+            nodeBG.position = node.position
+            nodeBG.zPosition = LayerZPos.menuBackgroundLayerZ + 1
+            backgroundLayer.addChild(nodeBG)
+        }
+    }
 }

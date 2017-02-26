@@ -60,12 +60,7 @@ class Level {
         /* Add Blocks */
         for row in 0..<Game.numRows {
             for col in 0..<Game.numCols {
-                // Condition of spawning block
-                let rand = arc4random_uniform(3)
-                if rand >= 2  && objectAt(col: col, row: row) == nil {
-                    
-                //}
-                //if objectAt(col: col, row: row) == nil && col / 3 * 3 == col {
+                if objectAt(col: col, row: row) == nil && col / 2 * 2 == col && row / 2 * 2 == row {
                     let block = Block(col: col, row: row)
                     board[col, row] = block
                     set.insert(block)
@@ -80,7 +75,6 @@ class Level {
         }
         return set
     }
-    
     
     func spawnNewEnemy() -> Enemy {
         /* Find available positions */
@@ -110,8 +104,6 @@ class Level {
         return enemy
     }
  
-    
-    
     // MARK: - Functions
     
     /* Updates the board array for player and enemy moves */

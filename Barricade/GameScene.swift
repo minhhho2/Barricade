@@ -29,10 +29,6 @@ class GameScene: SKScene {
     let pauseLayer = SKNode()
     let gameOverLayer = SKNode()
 
-    // MARK: - UI
-    //var arrowPad: ArrowPad?
-    //var settingPad: SettingPad?
-    
     /* Game variables */
     var isGameOver: Bool = false
     var isMute: Bool = false
@@ -101,20 +97,7 @@ class GameScene: SKScene {
         
         let menuPos = CGPoint(x: xRight, y: baseLine + labelHeight)
         _ = TouchableLabel(text: "MENU", name: "Menu", pos: menuPos, layer: touchableLayer, fontName: "AvenirNext-Bold", fontSize: size.width / 15, vertAlign: .bottom, horzAlign: .right)
-        
-        //arrowPad = ArrowPad(arrSize: CGSize(width: TileWidth, height: TileHeight), xRight: xRight, yBot: yBot, layer: touchableLayer, size: size)
-        
-        //settingPad = SettingPad(arrSize: btnSize, xPos: xLeft, yPos: baseLine + labelHeight * 3.5, layer: touchableLayer)
-        
-        /*
-        
-        let downPos = CGPoint(x: xRight - btnSize.width, y: baseLine)
-        _ = TouchableLabel(text: "DOWN", name: "Down Alpha", pos: downPos, layer: touchableLayer, fontName: "AvenirNext-Bold", fontSize: size.width / 15, vertAlign: .bottom, horzAlign: .right)
-        
-        let upPos = CGPoint(x: xRight, y: baseLine)
-        _ = TouchableLabel(text: "UP", name: "Up Alpha", pos: upPos, layer: touchableLayer, fontName: "AvenirNext-Bold", fontSize: size.width / 15, vertAlign: .bottom, horzAlign: .right)
- */
-        
+
         startNewGame(stage: Game.initialStage, score: 0)
  
     }
@@ -293,25 +276,6 @@ class GameScene: SKScene {
             handleTouchOnPauseLabel()
             return
         }
-        /*
-        if touchedNode == touchableLayer.childNode(withName: "Mute") {
-            Music.toggleSound(scene: self, layer: touchableLayer)
-            return
-        }*/
-        
-       /* if touchedNode == touchableLayer.childNode(withName: "Up Alpha") {
-            Music.playSound(scene: self, sound: Sounds.click)
-            arrowPad?.increaseAlpha()
-            arrowPad?.setAllArrowAlpha(to: arrowPad!.alpha)
-            return
-        }
-        
-        if touchedNode == touchableLayer.childNode(withName: "Down Alpha") {
-            Music.playSound(scene: self, sound: Sounds.click)
-            arrowPad?.decreaseAlpha()
-            arrowPad?.setAllArrowAlpha(to: arrowPad!.alpha)
-            return
-        }*/
         
         let yfallsDownBy = self.size.height / 2 - (TileHeight * CGFloat(Game.numRows) / 2)
         
