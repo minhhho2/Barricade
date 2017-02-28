@@ -58,7 +58,7 @@ class GameViewController: UIViewController, GADInterstitialDelegate, Interstitia
     // MARK: - AdMob Functions
     func loadRequest() {
         let request = GADRequest()
-        request.testDevices = [kGADSimulatorID]
+//        request.testDevices = [kGADSimulatorID]
         bannerView.load(request)
     }
     
@@ -71,10 +71,10 @@ class GameViewController: UIViewController, GADInterstitialDelegate, Interstitia
     }
     
     func createAndLoadInterstitial() -> GADInterstitial {
-        let interstitialAd = GADInterstitial(adUnitID: "ca-app-pub-3940256099942544/4411468910")
+        let interstitialAd = GADInterstitial(adUnitID: "ca-app-pub-4301502070358132/8723206604")
         interstitialAd.delegate = self
         let request = GADRequest()
-        request.testDevices = [kGADSimulatorID]
+        //request.testDevices = [kGADSimulatorID]
         interstitialAd.load(request)
         return interstitialAd
     }

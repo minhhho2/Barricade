@@ -27,9 +27,9 @@
 		063E850D1E61962300937430 /* Tile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 063E84FC1E61962300937430 /* Tile.swift */; };
 		063E850E1E61962300937430 /* TouchableLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 063E84FD1E61962300937430 /* TouchableLabel.swift */; };
 		063E850F1E61962300937430 /* TouchableNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 063E84FE1E61962300937430 /* TouchableNode.swift */; };
-		063E85171E6198C200937430 /* click.wav in Resources */ = {isa = PBXBuildFile; fileRef = 063E85121E6198C200937430 /* click.wav */; };
 		063E851A1E6198C200937430 /* playerMove.wav in Resources */ = {isa = PBXBuildFile; fileRef = 063E85151E6198C200937430 /* playerMove.wav */; };
 		063E85221E62D64B00937430 /* Assets 19-21-38-575.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 063E85211E62D64B00937430 /* Assets 19-21-38-575.xcassets */; };
+		068CBCEA1E658A4C00CF649D /* click.wav in Resources */ = {isa = PBXBuildFile; fileRef = 068CBCE91E658A4C00CF649D /* click.wav */; };
 		3957CBCFB6732F9059D6C415 /* libPods-Barricade.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2147E1CA6C38B69674A7A525 /* libPods-Barricade.a */; };
 /* End PBXBuildFile section */
 
@@ -56,9 +56,9 @@
 		063E84FC1E61962300937430 /* Tile.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Tile.swift; sourceTree = "<group>"; };
 		063E84FD1E61962300937430 /* TouchableLabel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TouchableLabel.swift; sourceTree = "<group>"; };
 		063E84FE1E61962300937430 /* TouchableNode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TouchableNode.swift; sourceTree = "<group>"; };
-		063E85121E6198C200937430 /* click.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = click.wav; sourceTree = "<group>"; };
 		063E85151E6198C200937430 /* playerMove.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = playerMove.wav; sourceTree = "<group>"; };
 		063E85211E62D64B00937430 /* Assets 19-21-38-575.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Assets 19-21-38-575.xcassets"; sourceTree = "<group>"; };
+		068CBCE91E658A4C00CF649D /* click.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = click.wav; sourceTree = "<group>"; };
 		2147E1CA6C38B69674A7A525 /* libPods-Barricade.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Barricade.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		2B51ECF739AF04AE1842A063 /* Pods-Barricade.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Barricade.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Barricade/Pods-Barricade.debug.xcconfig"; sourceTree = "<group>"; };
 		76CB60385DE37CECF2881F65 /* Pods-Barricade.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Barricade.release.xcconfig"; path = "Pods/Target Support Files/Pods-Barricade/Pods-Barricade.release.xcconfig"; sourceTree = "<group>"; };
@@ -113,7 +113,7 @@
 		063E85101E6198B700937430 /* Music */ = {
 			isa = PBXGroup;
 			children = (
-				063E85121E6198C200937430 /* click.wav */,
+				068CBCE91E658A4C00CF649D /* click.wav */,
 				063E85151E6198C200937430 /* playerMove.wav */,
 			);
 			name = Music;
@@ -255,8 +255,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				060A8E9C1E6192E800E9C368 /* Main.storyboard in Resources */,
-				063E85171E6198C200937430 /* click.wav in Resources */,
 				063E851A1E6198C200937430 /* playerMove.wav in Resources */,
+				068CBCEA1E658A4C00CF649D /* click.wav in Resources */,
 				060A8EA11E6192E800E9C368 /* LaunchScreen.storyboard in Resources */,
 				063E85221E62D64B00937430 /* Assets 19-21-38-575.xcassets in Resources */,
 			);

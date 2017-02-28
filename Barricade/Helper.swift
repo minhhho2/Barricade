@@ -9,6 +9,7 @@
 import Foundation
 import SpriteKit
 
+/* Possible directions that in game entities game move */
 enum Direction: String {
     case none = "None", up = "Up", down = "Down", left = "Left", right = "Right"
 }
@@ -21,12 +22,12 @@ struct ImageName {
 }
 
 struct Message {
-    static let newGame = "Tap To Play!"
-    static let resumeGame = "Tap To Resume!"
-    static let restartLevel = "Restart Level! Tap To Play!"
-    static let nextLevel = "Next Level! Tap To Play!"
-    static let enterMenu = "Exit Game?"
-    static let gameOver = "Game Over!"
+    static let newGame = "TAP TO PLAY!"//"Tap To Play!"
+    static let resumeGame = "TAP TO RESUME!"//"Tap To Resume!"
+    static let restartLevel = "RESTART LEVEL! TAP TO PLAY!" //"Restart Level! Tap To Play!"
+    static let nextLevel = "NEXT LEVEL! TAP TO PLAY"//"Next Level! Tap To Play!"
+    static let exitGame = "EXIT GAME?"//"Exit Game?"
+    static let gameOver = "GAME OVER!"//"Game Over!"
 }
 struct Game {
     // Odd number for pretty board

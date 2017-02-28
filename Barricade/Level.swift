@@ -60,7 +60,7 @@ class Level {
         /* Add Blocks */
         for row in 0..<Game.numRows {
             for col in 0..<Game.numCols {
-                if objectAt(col: col, row: row) == nil && col / 2 * 2 == col && row / 2 * 2 == row {
+                if objectAt(col: col, row: row) == nil && col % 3 == 1 {//&& row % 2 == 1 {
                     let block = Block(col: col, row: row)
                     board[col, row] = block
                     set.insert(block)
