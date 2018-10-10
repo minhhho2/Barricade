@@ -17,3 +17,5 @@ The player proceeds to the next round when they 'barricade' the foe. This is ach
   - Sounds on interaction with the game
  
  ## Figures
+![alt text](https://github.com/minhhho2/Barricade/blob/master/assets/game.png)
+
